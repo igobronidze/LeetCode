@@ -1,4 +1,4 @@
-package com.leetcode.algorythm.graph;
+package com.leetcode.algorithm.graph;
 
 import org.junit.Assert;
 import org.junit.Test;
