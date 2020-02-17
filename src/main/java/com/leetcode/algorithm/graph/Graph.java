@@ -11,6 +11,7 @@ public class Graph {
 
     public Graph() {}
 
+
     public Graph(boolean undirected) {
         this.undirected = undirected;
     }
