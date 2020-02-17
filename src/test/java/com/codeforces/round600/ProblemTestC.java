@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.Map;
 
-public class ProblemCTest extends ProblemTest {
+public class ProblemTestC extends ProblemTest {
 
     @BeforeClass
     public static void init() {
@@ -18,8 +18,6 @@ public class ProblemCTest extends ProblemTest {
 
     @Test
     public void testCases() {
-        for (Map.Entry<String, String> entry : cases.entrySet()) {
-            testCase(ProblemC.class, entry.getKey(), entry.getValue());
-        }
+        testCases(ProblemC.class);
     }
 }
