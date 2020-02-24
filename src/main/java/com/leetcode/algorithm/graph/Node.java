@@ -13,6 +13,10 @@ public class Node {
 
     private int level;
 
+    private boolean currStack;
+
+    private int color;
+
     public Node(String label) {
         this.label = label;
     }
@@ -47,5 +51,21 @@ public class Node {
 
     public void removeEdge(String label) {
         edges.remove(label);
+    }
+
+    public boolean isCurrStack() {
+        return currStack;
+    }
+
+    public void setCurrStack(boolean currStack) {
+        this.currStack = currStack;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }
