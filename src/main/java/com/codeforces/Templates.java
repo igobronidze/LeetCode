@@ -7,6 +7,13 @@ import java.util.Scanner;
 
 public class Templates {
 
+    private static void readT(Scanner scanner) {
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+
+        }
+    }
+
     private static void readNAndList(Scanner scanner) {
         int n = scanner.nextInt();
         List<Integer> list = new ArrayList<>();
