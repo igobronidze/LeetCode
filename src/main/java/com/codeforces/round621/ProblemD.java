@@ -29,41 +29,44 @@ public class ProblemD {
             edges.add(new Pair<>(scanner.nextInt(), scanner.nextInt()));
         }
 
+        Map<Integer, Pair<Integer, Integer>> distances = new HashMap<>();
+
         Graph graph = new Graph(n);
         for (Pair<Integer, Integer> pair : edges) {
             graph.addEdge(pair.first, pair.second);
         }
         graph.bfs(1);
         int distToN = graph.nodes.get(n).dist;
-        List<Pair<Integer, Integer>> distancesFrom1 = new ArrayList<>();
         for (int specialNode : specialNodes) {
-            distancesFrom1.add(new Pair<>(specialNode,  graph.nodes.get(specialNode).dist));
+            distances.put(specialNode, new Pair<>(graph.nodes.get(specialNode).dist, 0));
         }
-
-
 
         graph = new Graph(n);
         for (Pair<Integer, Integer> pair : edges) {
             graph.addEdge(pair.first, pair.second);
         }
         graph.bfs(n);
-        List<Pair<Integer, Integer>> distancesFromN = new ArrayList<>();
         for (int specialNode : specialNodes) {
-            distancesFromN.add(new Pair<>(specialNode,  graph.nodes.get(specialNode).dist));
+            distances.get(specialNode).second = graph.nodes.get(specialNode).dist;
         }
 
-        distancesFrom1.sort((t1, t2) -> Integer.compare(t2.second, t1.second));
-        distancesFromN.sort((t1, t2) -> Integer.compare(t2.second, t1.second));
+        List<Pair<Integer, Integer>> distList = new ArrayList<>(distances.values());
+        distList.sort((p1, p2) -> Integer.compare(p1.first - p2.first, p1.second - p2.second));
 
-        int ans = 0;
-        if (!distancesFrom1.get(0).first.equals(distancesFromN.get(0).first)) {
-            ans = Math.min(distToN, distancesFrom1.get(0).second + distancesFromN.get(0).second + 1);
-        } else {
-            int max = Math.max(distancesFrom1.get(0).second + distancesFromN.get(1).second + 1, distancesFrom1.get(1).second + distancesFromN.get(0).second + 1);
-            ans = Math.min(max, distToN);
+        int[] maxArr = new int[distList.size() + 1];
+
+        maxArr[distList.size() - 1] = distList.get(distList.size() - 1).second;
+        for (int i = distList.size() - 2; i >= 0; i--) {
+            maxArr[i] = Integer.max(maxArr[i + 1], distList.get(i).second);
         }
 
-        out.println(ans);
+        int ans = Integer.MIN_VALUE;
+
+        for (int i = 0; i < distList.size() - 1; i++) {
+            ans = Math.max(ans, distList.get(i).first + maxArr[i + 1]);
+        }
+
+        out.println(Math.min(ans + 1, distToN));
 
 
         out.flush();
