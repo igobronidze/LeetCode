@@ -3,9 +3,7 @@ package com.codeforces.ozon_tech_challenge_2020;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class ProblemD {
 
@@ -18,62 +16,53 @@ public class ProblemD {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        Set<Pair> pairs = new HashSet<>();
 
-        for (int i = 0; i < n; i++) {
+        Map<Integer, ArrayList<Integer>> tree = new HashMap<>();
+        for (int i = 0; i < n - 1; i++) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
-            pairs.add(new Pair(Math.min(x, y), Math.max(x, y)));
+            if (!tree.containsKey(x)) {
+                tree.put(x, new ArrayList<>());
+            }
+            if (!tree.containsKey(y)) {
+                tree.put(y, new ArrayList<>());
+            }
+            tree.get(x).add(y);
+            tree.get(y).add(x);
         }
 
-        int x = 1;
-        int y = 2;
-        while (y < n) {
-            if (!pairs.contains(new Pair(x, y))) {
-                out.println("? " + x + " " + y);
-                int z = scanner.nextInt();
-                if (z != x && z != y) {
-                    x = z;
-                } else if (x == z) {
-
-                }
-            } else {
-                y++;
+        LinkedList<Integer> leaves = new LinkedList<>();
+        for (int i = 1; i <= n; i++) {
+            if (tree.get(i).size() == 1) {
+                leaves.add(i);
             }
         }
 
+        while (true) {
+            int x = leaves.poll();
+            int y = leaves.poll();
 
-        out.flush();
-    }
+            out.println("? " + x + " " + y);
+            out.flush();
+            int a = scanner.nextInt();
+            if (a == x || a == y || leaves.isEmpty()) {
+                out.println("! " + a);
+                out.flush();
+                break;
+            }
+            int p = tree.get(x).get(0);
+            int q = tree.get(y).get(0);
 
-    private static class Pair {
+            tree.get(p).remove(Integer.valueOf(x));
+            tree.get(q).remove(Integer.valueOf(y));
 
-        private Integer first;
-
-        private Integer second;
-
-        public Pair() {
+            if (tree.get(p).size() == 1) {
+                leaves.add(p);
+            }
+            if (p != q && tree.get(q).size() == 1) {
+                leaves.add(q);
+            }
         }
 
-        public Pair(Integer first, Integer second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        public Integer getFirst() {
-            return first;
-        }
-
-        public void setFirst(Integer first) {
-            this.first = first;
-        }
-
-        public Integer getSecond() {
-            return second;
-        }
-
-        public void setSecond(Integer second) {
-            this.second = second;
-        }
     }
 }
