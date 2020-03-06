@@ -1,9 +1,10 @@
-package com.codeforces;
+package com.codeforces.codecraft_20;
 
 import java.io.*;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,6 +14,25 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        int p = scanner.nextInt();
+
+        int a = -1, b = -1;
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            if (x % p != 0 && a < 0) {
+                a = i;
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            int x = scanner.nextInt();
+            if (x % p != 0 && b < 0) {
+                b = i;
+            }
+        }
+
+        out.println(a + b);
 
         out.flush();
     }
@@ -48,7 +68,7 @@ public class ProblemTemplate {
             return Double.parseDouble(next());
         }
 
-        private String nextLine() {
+        private String nextLine(){
             String str = "";
             try {
                 str = bufferedReader.readLine();
