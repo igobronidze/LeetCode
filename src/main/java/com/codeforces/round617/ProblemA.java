@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round617;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,6 +13,25 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            int[] arr = new int[n + 1];
+            int x = 0;
+            for (int i = 0; i < n; i++) {
+                arr[i] = scanner.nextInt();
+                if (arr[i] % 2 == 0) {
+                    x++;
+                }
+            }
+            if (x == n) {
+                out.println("NO");
+            } else if (n % 2 == 0 && x == 0) {
+                out.println("NO");
+            } else {
+                out.println("YES");
+            }
+        }
 
         out.flush();
     }
@@ -65,7 +84,8 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

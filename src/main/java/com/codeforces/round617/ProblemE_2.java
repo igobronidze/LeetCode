@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round617;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemE_2 {
 
     public static InputStream inputStream = System.in;
 
@@ -13,6 +13,28 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        String s = scanner.next();
+
+        int[] arr = new int[200];
+        int[] ans = new int[n + 1];
+
+
+        int mmm = 0;
+        for (int i = 0; i < n; i++) {
+            int m = 0;
+            for (int k = s.charAt(i) + 1; k <= 'z'; k++) {
+                m = Math.max(m, arr[k]);
+            }
+            arr[s.charAt(i)] = m + 1;
+            ans[i] = m + 1;
+            mmm = Math.max(mmm, m + 1);
+        }
+
+        out.println(mmm);
+        for (int i = 0; i < n; i++) {
+            out.print(ans[i] + " ");
+        }
 
         out.flush();
     }
