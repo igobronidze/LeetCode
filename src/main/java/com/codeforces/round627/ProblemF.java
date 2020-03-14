@@ -32,10 +32,13 @@ public class ProblemF {
 
         tree.specifyNodesInitialValues();
 
-        tree.updateNodesValues();
+        Map<Integer, Integer> ans = new HashMap<>();
+        ans.put(1, tree.nodes.get(1).value);
+
+        tree.solve(tree.root, ans);
 
         for (int i = 1; i <= n; i++) {
-            out.print(tree.nodes.get(i).value + " ");
+            out.print(ans.get(i) + " ");
         }
 
 
@@ -69,8 +72,21 @@ public class ProblemF {
             root.specifyValue();
         }
 
-        private void updateNodesValues() {
-            root.updateValue();
+        private void solve(Node node, Map<Integer, Integer> ans) {
+            for (Node child : node.children) {
+                int x = node.value;
+                int y = child.value;
+                if (child.value > 0) {
+                    node.value -= child.value;
+                }
+                if (node.value > 0) {
+                    child.value += node.value;
+                }
+                ans.put(child.label, child.value);
+                solve(child, ans);
+                node.value = x;
+                child.value = y;
+            }
         }
     }
 
@@ -118,23 +134,6 @@ public class ProblemF {
                 value++;
             } else {
                 value--;
-            }
-        }
-
-        private void updateValue() {
-            if (label != parent.label) {
-                if (color) {
-                    value = Math.max(value, parent.value);
-                } else {
-                    if (value == 0) {
-                        value = Math.max(value, parent.value);
-                    } else {
-                        value = Math.max(value, parent.value - 1);
-                    }
-                }
-            }
-            for (Node child : children) {
-                child.updateValue();
             }
         }
     }
