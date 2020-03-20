@@ -1,7 +1,7 @@
 package com.codeforces.round506;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class ProblemE {
 
@@ -13,8 +13,94 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        Tree tree = new Tree(n);
+
+        for (int i = 0; i < n - 1; i++) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            tree.addEdge(x, y);
+        }
+
+        tree.makeTree(1);
+
+        PriorityQueue<Node> toVisit = new PriorityQueue<>((a, b) -> Integer.compare(b.level, a.level));
+        toVisit.addAll(tree.nodes.values());
+
+        int ans = 0;
+        while (!toVisit.isEmpty()) {
+            Node node = toVisit.poll();
+            if (node.level <= 2) {
+                break;
+            }
+            if (node.visited) {
+                continue;
+            }
+            Node parent = node.parent;
+            parent.visited = true;
+            parent.parent.visited = true;
+            for (Node child : parent.children) {
+                child.visited = true;
+            }
+            ans++;
+        }
+
+        out.println(ans);
 
         out.flush();
+    }
+
+    private static class Tree {
+
+        private Map<Integer, Node> nodes = new HashMap<>();
+
+        private Tree(int n) {
+            for (int i = 1; i <= n; i++) {
+                nodes.put(i, new Node(i));
+            }
+        }
+
+        private void addEdge(int x, int y) {
+            nodes.get(x).addChild(nodes.get(y));
+            nodes.get(y).addChild(nodes.get(x));
+        }
+
+        private void makeTree(int rootLabel) {
+            nodes.get(rootLabel).makeTree(nodes.get(rootLabel));
+        }
+    }
+
+    private static class Node {
+
+        private int label;
+
+        private int level;
+
+        private List<Node> children = new ArrayList<>();
+
+        private Node parent;
+
+        private boolean visited;
+
+        private Node(int label) {
+            this.label = label;
+        }
+
+        private void addChild(Node child) {
+            children.add(child);
+        }
+
+        private void makeTree(Node parent) {
+            this.parent = parent;
+            for (Node child : new ArrayList<>(children)) {
+                if (child.label == parent.label) {
+                    children.remove(child);
+                } else {
+                    child.level = this.level + 1;
+                    child.makeTree(this);
+                }
+            }
+        }
     }
 
     private static class MyScanner {

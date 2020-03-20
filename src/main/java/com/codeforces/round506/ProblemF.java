@@ -1,9 +1,11 @@
 package com.codeforces.round506;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
-public class ProblemD {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -13,40 +15,50 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            list.add(scanner.nextInt());
-        }
+        long a = scanner.nextLong();
+        long b = scanner.nextLong();
 
-        Map<Integer, Integer>[] rem = new HashMap[11];
-        for (int i = 0; i <= 10; i++) {
-            rem[i] = new HashMap<>();
-        }
+        long ans = (a + b + 1) * 2;
 
-        for (int i = 0; i < n; i++) {
-            int length = getDigitsCount(list.get(i));
-            int mod = list.get(i) % k;
-            if (!rem[length].containsKey(mod)) {
-                rem[length].put(mod, 0);
+        List<Integer> aDivisibles = new ArrayList<>();
+        List<Integer> bDivisibles = new ArrayList<>();
+        for (int i = 1; i <= Math.sqrt(a); i++) {
+            if (a % i == 0) {
+                aDivisibles.add(i);
             }
-            rem[length].put(mod, rem[length].get(mod) + 1);
         }
-
-        long ans = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 1; j <= 10; j++) {
-                long x = ((long) list.get(i) % k) * ((long) Math.pow(10, j) % k);
-                int mod = (k - (int)(x % k)) % k;
-                ans += rem[j].getOrDefault(mod, 0);
+        for (int i = 1; i <= Math.sqrt(b); i++) {
+            if (b % i == 0) {
+                bDivisibles.add(i);
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            long x = ((long) Math.pow(10, getDigitsCount(list.get(i))) % k) * list.get(i) + list.get(i);
-            if (x % k == 0) {
-                ans--;
+
+        int indexA = 0;
+        int indexB = 0;
+        for (int i = 1; i <= Math.sqrt(a + b); i++) {
+            if ((a + b) % i == 0) {
+                while (true) {
+                    if (indexA == aDivisibles.size() - 1 || aDivisibles.get(indexA + 1) > i) {
+                        break;
+                    } else {
+                        indexA++;
+                    }
+                }
+                if ((a + b) / i >= a / aDivisibles.get(indexA)) {
+                    ans = Math.min(ans, 2L * ((a + b) / i + i));
+                }
+
+                while (true) {
+                    if (indexB == bDivisibles.size() - 1 || bDivisibles.get(indexB + 1) > i) {
+                        break;
+                    } else {
+                        indexB++;
+                    }
+                }
+                if ((a + b) / i >= b / bDivisibles.get(indexB)) {
+                    ans = Math.min(ans, 2L * ((a + b) / i + i));
+                }
             }
         }
 
@@ -54,10 +66,6 @@ public class ProblemD {
 
 
         out.flush();
-    }
-
-    private static int getDigitsCount(int x) {
-        return Integer.toString(x).length();
     }
 
     private static class MyScanner {
@@ -108,8 +116,7 @@ public class ProblemD {
 
         private S second;
 
-        public Pair() {
-        }
+        public Pair() {}
 
         public Pair(F first, S second) {
             this.first = first;

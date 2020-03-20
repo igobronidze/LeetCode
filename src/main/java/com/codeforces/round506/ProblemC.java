@@ -19,51 +19,44 @@ public class ProblemC {
             segments.add(new Pair<>(scanner.nextInt(), scanner.nextInt()));
         }
 
-        Collections.sort(segments, (a, b) -> {
-            int x = Integer.compare(a.first, b.first);
-            if (x != 0) {
-                return x;
-            } else {
-                return Integer.compare(a.second, b.second);
-            }
-        });
+        List<Pair<Integer, Integer>> intersectionsLeft = getIntersections(segments);
+        Collections.reverse(segments);
+        List<Pair<Integer, Integer>> intersectionsRight = getIntersections(segments);
 
-        Map<Integer, Integer> countSegmentsInPoint = new TreeMap<>();
+        int ans = 0;
         for (int i = 0; i < n; i++) {
-            int x = segments.get(i).first;
-            int y = segments.get(i).second;
-            if (!countSegmentsInPoint.containsKey(x)) {
-                countSegmentsInPoint.put(x, 0);
-            }
-            if (!countSegmentsInPoint.containsKey(y)) {
-                countSegmentsInPoint.put(y, 0);
-            }
-            countSegmentsInPoint.put(x, countSegmentsInPoint.get(x) + 1);
-            countSegmentsInPoint.put(y, countSegmentsInPoint.get(y) - 1);
+            Pair<Integer, Integer> left = i == 0 ? null : intersectionsLeft.get(i - 1);
+            Pair<Integer, Integer> right = i == n - 1 ? null : intersectionsRight.get(n - i - 2);
+            Pair<Integer, Integer> merged = merge(left, right);
+            ans = Math.max(ans, merged.second - merged.first);
         }
 
-
-        int x = 0;
-        int y = 0;
-        Map<Integer, Integer> countNMinusOnePoints = new HashMap<>();
-        for (Map.Entry<Integer, Integer> entry : countSegmentsInPoint.entrySet()) {
-            countNMinusOnePoints.put(entry.getKey(), y);
-            if (entry.getValue() == n) {
-                x++;
-            } else if (entry.getValue() == n - 1) {
-                y++;
-            }
-        }
-
-        int max = 0;
-        for (Pair<Integer, Integer> segment : segments) {
-            max = Math.max(max, countNMinusOnePoints.get(segment.second) - countNMinusOnePoints.get(segment.first));
-        }
-
-        out.println(max + x);
-
+        out.println(ans);
 
         out.flush();
+    }
+
+    private static List<Pair<Integer, Integer>> getIntersections(List<Pair<Integer, Integer>> segments) {
+        List<Pair<Integer, Integer>> intersections = new ArrayList<>();
+        Pair<Integer, Integer> intersection = new Pair<>(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        for (int i = 0; i < segments.size(); i++) {
+            intersection = merge(intersection, segments.get(i));
+            intersections.add(new Pair<>(intersection.first, intersection.second));
+        }
+        return intersections;
+    }
+
+    private static Pair<Integer, Integer> merge(Pair<Integer, Integer> left, Pair<Integer, Integer> right) {
+        if (left == null) {
+            return right;
+        } else if (right == null) {
+            return left;
+        }
+        Pair<Integer, Integer> merged = new Pair<>();
+        merged.first = Math.max(left.first, right.first);
+        merged.second = Math.min(left.second, right.second);
+
+        return merged;
     }
 
     private static class MyScanner {
