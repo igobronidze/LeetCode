@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round595;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 

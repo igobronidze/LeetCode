@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round595;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemB2 {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +13,42 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int t = scanner.nextInt();
+        for (int q = 0; q < t; q++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                list.add(scanner.nextInt());
+            }
 
+            List<Integer> ans = new ArrayList<>();
+            Map<Integer, Map<Integer, Integer>> map = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                int x = list.get(i);
+                int a = 1;
+                while (true) {
+                    if (x == i + 1) {
+                        break;
+                    }
+                    if (map.containsKey(x) && map.get(x).containsKey(i + 1)) {
+                        a += map.get(x).get(i + 1);
+                        break;
+                    }
+                    a++;
+                    x = list.get(x - 1);
+                    if (!map.containsKey(i + 1)) {
+                        map.put(i + 1, new HashMap<>());
+                    }
+                    map.get(i + 1).put(x, a);
+                }
+                ans.add(a);
+            }
 
-
+            for (int x : ans) {
+                out.print(x + " ");
+            }
+            out.println();
+        }
 
 
         out.flush();
@@ -69,7 +102,8 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round479;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +13,18 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
 
+        for (int i = 0; i < k; i++) {
+            if (n % 10 == 0) {
+                n = n / 10;
+            } else {
+                n = n - 1;
+            }
+        }
 
-
+        out.println(n);
 
 
         out.flush();

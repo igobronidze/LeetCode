@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.round611;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -14,8 +14,49 @@ public class ProblemTemplate {
         PrintWriter out = new PrintWriter(outputStream);
 
 
+        int n = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        boolean[] b = new boolean[n + 1];
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            b[x] = true;
+        }
 
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        for (int i = 1; i <= n; i++) {
+            if (!b[i]) {
+                linkedList.add(i);
+            }
+        }
 
+        List<Integer> ans = new ArrayList<>();
+        int last = 0;
+        for (int i = 0; i < n; i++) {
+            if (list.get(i) != 0) {
+                ans.add(list.get(i));
+            } else {
+                int x = 0;
+                if (linkedList.getFirst() == i + 1) {
+                    x = linkedList.removeLast();
+                } else {
+                    x = linkedList.removeFirst();
+                }
+                ans.add(x);
+                if (linkedList.isEmpty()) {
+                    if (x == i + 1) {
+                        int tmp = ans.get(last);
+                        ans.set(last, x);
+                        ans.set(i, tmp);
+                    }
+                }
+                last = i;
+            }
+        }
+
+        for (int x : ans) {
+            out.print(x + " ");
+        }
 
 
         out.flush();
@@ -69,7 +110,8 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

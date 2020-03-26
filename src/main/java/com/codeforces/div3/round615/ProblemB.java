@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.round615;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,10 +13,56 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
 
+            Map<Integer, List<Integer>> map = new HashMap<>();
 
+            for (int i = 0; i < n; i++) {
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                if (!map.containsKey(x)) {
+                    map.put(x, new ArrayList<>());
+                }
+                map.get(x).add(y);
+            }
 
+            StringBuilder ans = new StringBuilder();
 
+            boolean b = false;
+            int j = 0;
+            int c = 0;
+            for (int i = 0; i <= 1000; i++) {
+                if (map.containsKey(i)) {
+                    List<Integer> list = map.get(i);
+                    Collections.sort(list);
+                    if (list.get(0) < j) {
+                        b = true;
+                        break;
+                    } else {
+                        for (int q = 0; q < (list.get(list.size() - 1) - j); q++) {
+                            ans.append("U");
+                        }
+                        j = list.get(list.size() - 1);
+                    }
+                    c++;
+                    if (c == map.size()) {
+                        break;
+                    }
+                    ans.append("R");
+                } else {
+                    ans.append("R");
+                }
+            }
+
+            if (b) {
+                out.println("NO");
+            } else {
+                out.println("YES");
+                out.println(ans.toString());
+            }
+        }
 
         out.flush();
     }

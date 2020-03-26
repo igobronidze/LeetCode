@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round486;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,10 +13,40 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int k = scanner.nextInt();
+        Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
+        Pair<Integer, Integer> ans1 = null, ans2 = null;
+        for (int p = 0; p < k; p++) {
+            int n = scanner.nextInt();
+            Map<Integer, Pair<Integer, Integer>> innerMap = new HashMap<>();
+            List<Integer> list = new ArrayList<>();
+            int s = 0;
+            for (int i = 0; i< n ; i++) {
+                int x = scanner.nextInt();
+                list.add(x);
+                s += x;
+            }
+
+            for (int i = 0; i < n; i++) {
+                int x = s - list.get(i);
+                if (map.containsKey(x)) {
+                    ans1 = map.get(x);
+                    ans2 = new Pair<>(p + 1, i + 1);
+                } else {
+                    innerMap.put(x, new Pair<>(p + 1, i + 1));
+                }
+            }
+            map.putAll(innerMap);
+        }
 
 
-
-
+        if (ans1 == null) {
+            out.println("NO");
+        } else {
+            out.println("YES");
+            out.println(ans1.first + " " + ans1.second);
+            out.println(ans2.first + " " + ans2.second);
+        }
 
         out.flush();
     }

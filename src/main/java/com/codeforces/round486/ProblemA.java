@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round486;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +13,25 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-
-
-
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        Set<Integer> set = new HashSet<>();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            if (!set.contains(x)) {
+                set.add(x);
+                list.add(i + 1);
+            }
+        }
+        if (k <= list.size()) {
+            out.println("YES");
+            for (int i = 0; i < k; i++) {
+                out.print(list.get(i) + " ");
+            }
+        } else {
+            out.println("NO");
+        }
 
 
         out.flush();
@@ -69,7 +85,8 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

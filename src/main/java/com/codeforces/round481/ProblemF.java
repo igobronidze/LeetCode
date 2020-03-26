@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round481;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -13,8 +13,58 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        List<Pair<Integer, Integer>> pairs = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            pairs.add(new Pair<>(x, i));
+        }
+        pairs.sort(Comparator.comparingInt(a -> a.first));
+
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < k; i++) {
+            int x = scanner.nextInt();
+            x--;
+            int y = scanner.nextInt();
+            y--;
+            if (!map.containsKey(x)) {
+                map.put(x, new ArrayList<>());
+            }
+            map.get(x).add(y);
+            if (!map.containsKey(y)) {
+                map.put(y, new ArrayList<>());
+            }
+            map.get(y).add(x);
+        }
 
 
+        int[] ans = new int[n];
+        int eq = 0;
+        for (int i = 0; i < n; i++) {
+            if (i > 0) {
+                if (pairs.get(i).first.equals(pairs.get(i - 1).first)) {
+                    eq++;
+                } else {
+                    eq = 0;
+                }
+            }
+            ans[pairs.get(i).second] += (i - eq);
+
+            if (map.containsKey(pairs.get(i).second)) {
+                for (int x : map.get(pairs.get(i).second)) {
+                    if (list.get(x) > list.get(pairs.get(i).second)) {
+                        ans[x]--;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            out.print(ans[i] + " ");
+        }
 
 
 

@@ -1,9 +1,11 @@
-package com.codeforces;
+package com.codeforces.round481;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,8 +15,29 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
 
+        List<Long> dorm = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            long x = scanner.nextLong();
+            if (dorm.isEmpty()) {
+                dorm.add(x);
+            } else {
+                dorm.add(dorm.get(dorm.size() - 1) + x);
+            }
+        }
 
+        int index = 0;
+        for (int i = 0; i < m; i++) {
+            long k = scanner.nextLong();
+
+            while (k > dorm.get(index)) {
+                index++;
+            }
+            long x = (index == 0) ? 0 : dorm.get(index - 1);
+            out.println((index + 1) + " " + (k - x));
+        }
 
 
 

@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round486;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,12 +13,38 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.next());
+        }
 
+        list.sort(Comparator.comparingInt(String::length));
 
+        for (int i = 1; i < n; i++) {
+            if (!isSubs(list.get(i - 1), list.get(i))) {
+                out.println("NO");
+                out.flush();
+                return;
+            }
+        }
 
+        out.println("YES");
+        for (String s : list) {
+            out.println(s);
+        }
 
 
         out.flush();
+    }
+
+    private static boolean isSubs(String a, String b) {
+        for (int i = 0; i <= b.length() - a.length(); i++) {
+            if (a.equals(b.substring(i, i + a.length()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static class MyScanner {

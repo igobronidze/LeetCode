@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round481;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,8 +13,23 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        String s = scanner.next();
 
+        int ans = 0;
+        int x = 0;
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == 'x') {
+                x++;
+            } else {
+                x = 0;
+            }
+            if (x >= 3) {
+                ans++;
+            }
+        }
 
+        out.print(ans);
 
 
 

@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.round486;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -12,10 +12,6 @@ public class ProblemTemplate {
     public static void main(String[] args) {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
-
-
-
-
 
 
         out.flush();

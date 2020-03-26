@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.round615;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +13,40 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int q = scanner.nextInt();
+        int x = scanner.nextInt();
 
 
+        PriorityQueue<Pair<Integer, Integer>> priorityQueue = new PriorityQueue<>((o1, o2) -> {
+            int x1 = Integer.compare(o1.first, o2.first);
+            if (x1 == 0) {
+                return Integer.compare(o1.second, o2.second);
+            }
+            return x1;
+        });
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < x; i++) {
+            priorityQueue.add(new Pair<>(0, i));
+            map.put(i, 0);
+        }
 
+        for (int i = 0; i < q; i++) {
+            int y = scanner.nextInt();
+            y = y % x;
+
+            map.put(y, map.get(y) + 1);
+            priorityQueue.add(new Pair<>(map.get(y), y));
+            Pair<Integer, Integer> pair;
+            while (true) {
+                pair = priorityQueue.peek();
+                if (!map.get(pair.second).equals(pair.first)) {
+                    priorityQueue.poll();
+                } else {
+                    break;
+                }
+            }
+            out.println(pair.first * x + pair.second);
+        }
 
 
         out.flush();
@@ -69,7 +100,8 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

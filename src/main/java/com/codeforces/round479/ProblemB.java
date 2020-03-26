@@ -1,9 +1,11 @@
-package com.codeforces;
+package com.codeforces.round479;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +15,23 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        String s = scanner.next();
 
+        Map<String, Integer> map = new HashMap<>();
+        String ans = "" + s.charAt(0) + s.charAt(1);
+        for (int i = 0; i < n - 1; i++) {
+            String str = "" + s.charAt(i) + s.charAt(i + 1);
+            if (!map.containsKey(str)) {
+                map.put(str, 0);
+            }
+            map.put(str, map.get(str) + 1);
+            if (map.get(ans) < map.get(str)) {
+                ans = str;
+            }
+        }
 
-
+        out.println(ans);
 
 
         out.flush();

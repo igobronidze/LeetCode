@@ -1,9 +1,11 @@
-package com.codeforces;
+package com.codeforces.div3.round627;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +15,31 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-
-
-
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                list.add(scanner.nextInt());
+            }
+            if (n == 1) {
+                out.println("YES");
+            } else {
+                boolean b1 = false, b2 = false;
+                for (int i = 0; i < n; i++) {
+                    if (list.get(i) % 2 == 0) {
+                        b1 = true;
+                    } else {
+                        b2 = true;
+                    }
+                }
+                if (b1 && b2) {
+                    out.println("NO");
+                } else {
+                    out.println("YES");
+                }
+            }
+        }
 
 
         out.flush();
@@ -69,7 +93,8 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

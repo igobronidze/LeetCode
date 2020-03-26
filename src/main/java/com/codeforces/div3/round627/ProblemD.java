@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.round627;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,10 +13,41 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        List<Integer> aList = new ArrayList<>();
+        List<Integer> bList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            aList.add(scanner.nextInt());
+        }
+        for (int i = 0; i < n; i++) {
+            bList.add(scanner.nextInt());
+        }
+
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(aList.get(i) - bList.get(i));
+        }
+        Collections.sort(list);
+
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+
+        for (int i = 0; i < n; i++) {
+            if (i == 0 || !list.get(i - 1).equals(list.get(i))) {
+                treeMap.put(list.get(i), i + 1);
+            }
+        }
+
+        long ans = 0;
 
 
+        for (int i = 1; i < n; i++) {
+            if (list.get(i) > 0) {
+                Map.Entry<Integer, Integer> entry = treeMap.higherEntry(-1 * list.get(i));
+                ans += (i - entry.getValue() + 1);
+            }
+        }
 
-
+        out.println(ans);
 
         out.flush();
     }
