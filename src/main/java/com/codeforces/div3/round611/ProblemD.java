@@ -15,48 +15,57 @@ public class ProblemD {
 
         int n = scanner.nextInt();
         int m = scanner.nextInt();
-        TreeSet<Integer> trees = new TreeSet<>();
-        for (int i = 0; i < n; i++) {
-            trees.add(scanner.nextInt());
-        }
 
-        int k = solve(trees, 0, m / 2 + 1, m);
+        Set<Integer> trees = new HashSet<>();
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            trees.add(x);
+            list1.add(x);
+            list2.add(x);
+        }
 
         Set<Integer> ans = new HashSet<>();
-        long s = 0;
-
-        k--;
-        int last = Integer.MIN_VALUE;
-        for (int x : trees) {
-            for (int i = Math.max(last, x - k); i <= x + k; i++) {
-                if (!trees.contains(i)) {
-                    ans.add(i);
-                    s += getDistance(trees, i);
+        boolean finished = false;
+        while (true) {
+            List<Integer> tmpList1 = new ArrayList<>();
+            List<Integer> tmpList2 = new ArrayList<>();
+            for (int x : list1) {
+                if (!ans.contains(x - 1) && !trees.contains(x - 1)) {
+                    ans.add(x - 1);
+                    tmpList1.add(x - 1);
                 }
-            }
-            last = x + k + 1;
-        }
-
-        k++;
-        for (int x : trees) {
-            if (ans.size() == m) {
-                break;
-            }
-            int p = x - k;
-            int q = x + k;
-            if (!trees.contains(p) && !ans.contains(p)) {
-                ans.add(p);
-                s += k;
                 if (ans.size() == m) {
+                    finished = true;
                     break;
                 }
             }
-            if (!trees.contains(q) && !ans.contains(q)) {
-                ans.add(q);
-                s += k;
+            if (finished) {
+                break;
+            }
+            for (int x : list2) {
+                if (!ans.contains(x + 1) && !trees.contains(x + 1)) {
+                    ans.add(x + 1);
+                    tmpList2.add(x + 1);
+                }
+                if (ans.size() == m) {
+                    finished = true;
+                    break;
+                }
+            }
+            list1 = tmpList1;
+            list2 = tmpList2;
+            if (finished) {
+                break;
             }
         }
 
+        long s = 0;
+        TreeSet<Integer> treeSet = new TreeSet<>(trees);
+        for (int x : ans) {
+            s += getDistance(treeSet, x);
+        }
 
         out.println(s);
         for (int x : ans) {
@@ -77,55 +86,6 @@ public class ProblemD {
         } else {
             return Math.min(Math.abs(a - x), Math.abs(b - x));
         }
-    }
-
-    private static int solve(TreeSet<Integer> trees, int l, int r, int m) {
-        if (l == r) {
-            return r;
-        }
-        if (l + 1 == r) {
-            if (cover(trees, l, m)) {
-                return l;
-            } else {
-                return r;
-            }
-        }
-        int mid = (l + r) / 2;
-        if (cover(trees, mid, m)) {
-            return solve(trees, l, mid, m);
-        } else {
-            return solve(trees, mid + 1, r, m);
-        }
-    }
-
-    private static boolean cover(TreeSet<Integer> trees, int k, int m) {
-        Set<Integer> set = new HashSet<>();
-        int last = Integer.MIN_VALUE;
-        Integer p = 0;
-        for (int x : trees) {
-            if (p != null && p == 0) {
-                p = x;
-            }
-            for (int i = Math.max(last, x - k); i <= x + k; i++) {
-                if (p == null) {
-                    set.add(i);
-                    if (set.size() == m) {
-                        return true;
-                    }
-                } else {
-                    if (p == i) {
-                        p = trees.higher(p);
-                    } else {
-                        set.add(i);
-                        if (set.size() == m) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            last = x + k + 1;
-        }
-        return false;
     }
 
     private static class MyScanner {

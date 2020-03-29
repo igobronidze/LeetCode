@@ -1,9 +1,9 @@
-package com.codeforces.round605;
+package com.codeforces.div3.round605;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemA {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -15,27 +15,52 @@ public class ProblemA {
 
         int t = scanner.nextInt();
         for (int p = 0; p < t; p++) {
-            long x = scanner.nextLong();
-            long y = scanner.nextLong();
-            long z = scanner.nextLong();
-
-            long ans = Long.MAX_VALUE;
-            for (long i = x - 1; i <= x + 1; i++) {
-                for (long j = y - 1; j <= y + 1; j++) {
-                    for (long k = z - 1; k <= z + 1; k++) {
-                        ans = Math.min(ans, getAns(i, j, k));
-                    }
+            String s = scanner.next();
+            int x = 0;
+            int y = 0;
+            int a = 0;
+            int b = 0;
+            for (char c : s.toCharArray()) {
+                if (c == 'L') {
+                    x++;
+                } else if (c == 'R') {
+                    y++;
+                } else if (c == 'U') {
+                    a++;
+                } else {
+                    b++;
                 }
             }
-
-            out.println(ans);
+            int k = Math.min(x, y);
+            int d = Math.min(a, b);
+            if (k == 0 && d == 0) {
+                out.println(0);
+                out.println();
+            } else if (k == 0) {
+                out.println(2);
+                out.println("UD");
+            } else if (d == 0) {
+                out.println(2);
+                out.println("LR");
+            } else {
+                out.println((k + d) * 2);
+                for (int i = 0; i < Math.min(x, y); i++) {
+                    out.print("L");
+                }
+                for (int i = 0; i < Math.min(a, b); i++) {
+                    out.print("U");
+                }
+                for (int i = 0; i < Math.min(x, y); i++) {
+                    out.print("R");
+                }
+                for (int i = 0; i < Math.min(a, b); i++) {
+                    out.print("D");
+                }
+                out.println();
+            }
         }
 
         out.flush();
-    }
-
-    private static long getAns(long x, long y, long z) {
-        return Math.abs(x - y) + Math.abs(x - z) + Math.abs(y - z);
     }
 
     private static class MyScanner {

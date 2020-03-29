@@ -1,4 +1,4 @@
-package com.codeforces.round605;
+package com.codeforces.div3.round605;
 
 import java.io.*;
 import java.util.*;
