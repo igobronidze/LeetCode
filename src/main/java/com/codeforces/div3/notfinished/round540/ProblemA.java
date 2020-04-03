@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.notfinished.round540;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,7 +13,19 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            long n = scanner.nextLong();
+            long a = scanner.nextLong();
+            long b = scanner.nextLong();
+            long ans = n * a;
+            if (n % 2 == 0) {
+                ans = Math.min(ans, n / 2 * b);
+            } else {
+                ans = Math.min(ans, n / 2 * b + a);
+            }
+            out.println(ans);
+        }
 
 
 
@@ -74,23 +86,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

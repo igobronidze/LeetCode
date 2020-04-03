@@ -1,9 +1,12 @@
-package com.codeforces;
+package com.codeforces.div3.notfinished.round582;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +16,45 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
 
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
+        }
+        Collections.sort(list);
 
+        Pair<Integer, Integer>[] arr = new Pair[200005];
+        for (int i = 0; i <= 200000; i++) {
+            arr[i] = new Pair<>(0, 0);
+        }
+        for (int i = 0; i < n; i++) {
+            int x = list.get(i);
+            int a = 0;
+            while (x != 0) {
+                if (arr[x].first == k) {
+                    break;
+                }
+                arr[x].first++;
+                arr[x].second += a;
+                a++;
+                x = x / 2;
+            }
+            if (arr[x].first != k) {
+                arr[x].first++;
+                arr[x].second += a;
+            }
+        }
 
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i <= 200000; i++) {
+            if (arr[i].first >= k) {
+                ans = Math.min(ans, arr[i].second);
+            }
+        }
+
+        out.println(ans);
 
 
         out.flush();
@@ -74,23 +113,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

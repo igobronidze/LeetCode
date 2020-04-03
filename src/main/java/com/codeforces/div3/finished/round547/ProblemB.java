@@ -1,9 +1,11 @@
-package com.codeforces;
+package com.codeforces.div3.finished.round547;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +15,28 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
+        }
 
+        for (int i = 0; i < n; i++) {
+            list.add(list.get(i));
+        }
 
+        int max = 0;
+        int x = 0;
+        for (int i = 0; i < 2 * n; i++) {
+            if (list.get(i) == 1) {
+                x++;
+            } else {
+                x = 0;
+            }
+            max = Math.max(max, x);
+        }
 
+        out.println(max);
 
 
         out.flush();
@@ -69,28 +90,12 @@ public class ProblemTemplate {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

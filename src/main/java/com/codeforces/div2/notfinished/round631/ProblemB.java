@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round631;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,6 +13,47 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                list.add(scanner.nextInt());
+            }
+
+            boolean[] isPerm = new boolean[n + 1];
+            Set<Integer> set = new HashSet<>();
+            int max = 0;
+            for (int i = 0; i < n; i++) {
+                if (set.contains(list.get(i))) {
+                    break;
+                }
+                set.add(list.get(i));
+                max = Math.max(max, list.get(i));
+                if (max == i + 1) {
+                    isPerm[i] = true;
+                }
+            }
+
+            set = new HashSet<>();
+            max = 0;
+            List<Pair<Integer, Integer>> ans = new ArrayList<>();
+            for (int i = n - 1; i > 0; i--) {
+                if (set.contains(list.get(i))) {
+                    break;
+                }
+                set.add(list.get(i));
+                max = Math.max(max, list.get(i));
+                if (max == n - i && isPerm[i - 1]) {
+                    ans.add(new Pair<>(i, n - i));
+                }
+            }
+
+            out.println(ans.size());
+            for (Pair<Integer, Integer> pair : ans) {
+                out.println(pair.first + " " + pair.second);
+            }
+        }
 
 
 

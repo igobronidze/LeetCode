@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round630;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,12 +13,41 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int k = scanner.nextInt();
 
+        String s = Integer.toBinaryString(k);
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i <= s.length(); i++) {
+            sb1.append('1');
+        }
+        StringBuilder sb2 = new StringBuilder("1");
+        for (int i = 0; i < s.length(); i++) {
+            sb2.append('0');
+        }
 
+        int a = binaryToInt(sb1.toString());
+        int b = binaryToInt(sb2.toString());
+
+        out.println("3 3");
+        out.println(a + " " + k + " " + 0);
+        out.println(b + " " + k + " " + 0);
+        out.println(a + " " + a + " " + k);
 
 
 
         out.flush();
+    }
+
+    private static int binaryToInt(String s) {
+        int x = 1;
+        int p = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == '1') {
+                p = p + x;
+            }
+            x = x * 2;
+        }
+        return p;
     }
 
     private static class MyScanner {
@@ -74,23 +103,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

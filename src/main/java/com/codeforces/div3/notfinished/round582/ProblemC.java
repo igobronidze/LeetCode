@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.notfinished.round582;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,6 +13,40 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
+        for (int i = 0; i <= 9; i++) {
+            Set<Integer> set = new HashSet<>();
+            int x = i;
+            int s = 0;
+            while (true) {
+                if (set.contains(x)) {
+                    break;
+                } else {
+                    set.add(x);
+                    s = s + x;
+                    x = (x + i) % 10;
+                }
+            }
+            map.put(i, new Pair<>(set.size(), s));
+        }
+
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            long n = scanner.nextLong();
+            long m = scanner.nextLong();
+
+            long k = n / m;
+            Pair<Integer, Integer> pair = map.get((int)(m % 10));
+            long ans = k / pair.first * pair.second;
+            k = k % pair.first;
+            long x = m % 10;
+            long y = x;
+            for (int i = 0; i < k; i++) {
+                ans += x;
+                x = (x + y) % 10;
+            }
+            out.println(ans);
+        }
 
 
 
@@ -74,23 +108,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

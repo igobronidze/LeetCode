@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div3.finished.round565;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,7 +13,28 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            long n = scanner.nextLong();
+            int x = 0;
+            while (n % 5 == 0) {
+                n = n / 5 * 4;
+                x++;
+            }
+            while (n % 3 == 0) {
+                n = n / 3 * 2;
+                x++;
+            }
+            while (n % 2 == 0) {
+                n = n / 2;
+                x++;
+            }
+            if (n == 1) {
+                out.println(x);
+            } else {
+                out.println(-1);
+            }
+        }
 
 
 

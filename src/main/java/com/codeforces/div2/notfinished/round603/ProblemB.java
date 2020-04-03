@@ -1,9 +1,11 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round603;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,10 +15,35 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<String> list = new ArrayList<>();
+            for (int i = 0 ; i < n; i++) {
+                list.add(scanner.next());
+            }
+            List<String> ans = new ArrayList<>();
+            int c = 0;
+            for (int i = 0; i < n; i++) {
+                if (ans.contains(list.get(i))) {
+                    c++;
+                    for (char k = '0'; k <= '9'; k++) {
+                        String str = list.get(i).substring(0, 3) + k;
+                        if (!ans.contains(str) && !list.contains(str)) {
+                            ans.add(str);
+                            break;
+                        }
+                    }
+                } else {
+                    ans.add(list.get(i));
+                }
+            }
 
-
-
-
+            out.println(c);
+            for (String s : ans) {
+                out.println(s);
+            }
+        }
 
         out.flush();
     }
@@ -60,37 +87,6 @@ public class ProblemTemplate {
                 e.printStackTrace();
             }
             return str;
-        }
-    }
-
-    private static class Pair<F, S> {
-
-        private F first;
-
-        private S second;
-
-        public Pair() {}
-
-        public Pair(F first, S second) {
-            this.first = first;
-            this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

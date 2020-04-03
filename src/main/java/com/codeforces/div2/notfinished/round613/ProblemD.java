@@ -1,9 +1,11 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round613;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,12 +15,43 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
+        }
 
-
-
+        out.println(solve(list, 30));
 
 
         out.flush();
+    }
+
+    private static int solve(List<Integer> list, int index) {
+        if (index == -1) {
+            return 0;
+        }
+        List<Integer> zeros = new ArrayList<>();
+        List<Integer> ones = new ArrayList<>();
+        for (int x : list) {
+            if ((x & (1 << index)) == 0) {
+                zeros.add(x);
+            } else {
+                ones.add(x);
+            }
+        }
+
+        if (zeros.isEmpty()) {
+            return solve(ones, index - 1);
+        } else if (ones.isEmpty()) {
+            return solve(zeros, index - 1);
+        }
+
+        int x = (1 << index) + solve(ones, index - 1);
+        int y = (1 << index) + solve(zeros, index - 1);
+
+
+        return Math.min(x, y);
     }
 
     private static class MyScanner {
@@ -74,23 +107,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

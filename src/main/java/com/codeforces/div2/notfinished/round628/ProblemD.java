@@ -1,9 +1,10 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round628;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.StringTokenizer;
 
-public class ProblemTemplate {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,12 +14,25 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        long u = scanner.nextLong();
+        long v = scanner.nextLong();
 
-
-
-
+        if (u == 0 && v == 0) {
+            out.println(0);
+        } else if (u > v) {
+            out.println(-1);
+        } else if (u == v) {
+            out.println(1);
+            out.println(u);
+        } if (u % 2 != v % 2) {
+            out.println(-1);
+        }
 
         out.flush();
+    }
+
+    private static long parseLong(String s, int base) {
+        return new BigInteger(s, base).longValue();
     }
 
     private static class MyScanner {
@@ -74,23 +88,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

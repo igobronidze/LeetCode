@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round603;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,9 +13,21 @@ public class ProblemTemplate {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-
-
-
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            Set<Integer> ans = new TreeSet<>();
+            ans.add(0);
+            for (int i = 1; i <= Math.sqrt(n); i++) {
+                ans.add(i);
+                ans.add(n / i);
+            }
+            out.println(ans.size());
+            for (int x : ans) {
+                out.print(x + " ");
+            }
+            out.println();
+        }
 
 
         out.flush();
@@ -60,37 +72,6 @@ public class ProblemTemplate {
                 e.printStackTrace();
             }
             return str;
-        }
-    }
-
-    private static class Pair<F, S> {
-
-        private F first;
-
-        private S second;
-
-        public Pair() {}
-
-        public Pair(F first, S second) {
-            this.first = first;
-            this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }

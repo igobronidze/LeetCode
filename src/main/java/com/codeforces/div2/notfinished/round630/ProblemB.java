@@ -1,9 +1,9 @@
-package com.codeforces;
+package com.codeforces.div2.notfinished.round630;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemTemplate {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -14,6 +14,44 @@ public class ProblemTemplate {
         PrintWriter out = new PrintWriter(outputStream);
 
 
+        List<Integer> primes = new ArrayList<>(Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31));
+
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                list.add(scanner.nextInt());
+            }
+            int max = 1;
+            Map<Integer, Integer> colors = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < primes.size(); j++) {
+                    if (list.get(i) % primes.get(j) == 0) {
+                        if (!colors.containsKey(primes.get(j))) {
+                            colors.put(primes.get(j), max++);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            List<Integer> ans = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < primes.size(); j++) {
+                    if (list.get(i) % primes.get(j) == 0) {
+                        ans.add(colors.get(primes.get(j)));
+                        break;
+                    }
+                }
+            }
+
+            out.println(max - 1);
+            for (int x : ans) {
+                out.print(x + " ");
+            }
+            out.println();
+        }
 
 
 
@@ -74,23 +112,6 @@ public class ProblemTemplate {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
-        }
-    }
-
-    private static class Triple<F, S, T> {
-
-        private F first;
-
-        private S second;
-
-        private T third;
-
-        public Triple() {}
-
-        public Triple(F first, S second, T third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
         }
     }
 }
