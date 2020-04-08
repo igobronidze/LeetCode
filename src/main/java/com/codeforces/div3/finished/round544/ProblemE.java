@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.finished.round544;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemC {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -15,43 +13,50 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            if (!map.containsKey(x)) {
+                map.put(x, 0);
             }
-        } catch (ArithmeticException ignored) {}
+            map.put(x, map.get(x) + 1);
+        }
+        Collections.sort(list);
 
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
+        List<Integer> possCount = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int c = 0;
+            for (int j = list.get(i); j >= list.get(i) - 5; j--) {
+                if (map.containsKey(j)) {
+                    c += map.get(j);
                 }
             }
-            out.println(ans);
+            possCount.add(c);
         }
 
 
+        int[][] dp = new int[n + 5][k + 5];
 
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int c = possCount.get(i);
+            int ind = i - c;
+            if (ind < 0) {
+                dp[i][1] = c;
+                ans = Math.max(ans, c);
+            } else {
+                for (int j = 1; j <= k; j++) {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[ind][j - 1] + c);
+                    ans = Math.max(ans, dp[i][j]);
+                }
+            }
+        }
+
+        out.println(ans);
 
 
         out.flush();
@@ -110,6 +115,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

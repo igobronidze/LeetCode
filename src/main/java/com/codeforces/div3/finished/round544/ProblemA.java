@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.finished.round544;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemC {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -15,41 +13,30 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
+        String s = scanner.next();
+        String t = scanner.next();
+        int h1 = Integer.parseInt(s.split(":")[0]);
+        int m1 = Integer.parseInt(s.split(":")[1]);
+        int h2 = Integer.parseInt(t.split(":")[0]);
+        int m2 = Integer.parseInt(t.split(":")[1]);
 
-        long[] sum = new long[powers.size()];
+        int x = h2 * 60 + m2 - h1 * 60 - m1;
 
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
+        m1 = m1 + x / 2;
+        h1 = h1 + m1 / 60;
+        m1 = m1 % 60;
 
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
-                }
-            }
-            out.println(ans);
+        String s1 = "" + h1;
+        if (s1.length() == 1) {
+            s1 = "0" + s1;
+        }
+        String s2 = "" + m1;
+        if (s2.length() == 1) {
+            s2 = "0" + m1;
         }
 
+
+        out.print(s1 + ":" + s2);
 
 
 
@@ -110,6 +97,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

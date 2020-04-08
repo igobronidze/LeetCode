@@ -1,8 +1,8 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.finished.round544;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class ProblemC {
@@ -15,41 +15,28 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
+        int n = scanner.nextInt();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            if (!map.containsKey(x)) {
+                map.put(x, 0);
             }
-        } catch (ArithmeticException ignored) {}
-
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
-                }
-            }
-            out.println(ans);
+            map.put(x, map.get(x) + 1);
         }
 
+        int ans = 0;
+        for (int x : map.keySet()) {
+            int s = 0;
+            for (int i = x; i <= x + 5; i++) {
+                if (map.containsKey(i)) {
+                    s += map.get(i);
+                }
+            }
+            ans = Math.max(ans, s);
+        }
+
+        out.println(ans);
 
 
 
@@ -110,6 +97,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

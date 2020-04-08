@@ -21,32 +21,29 @@ public class ProblemB2 {
                 list.add(scanner.nextInt());
             }
 
-            List<Integer> ans = new ArrayList<>();
-            Map<Integer, Map<Integer, Integer>> map = new HashMap<>();
+            int ans[] = new int[n + 1];
             for (int i = 0; i < n; i++) {
-                int x = list.get(i);
-                int a = 1;
-                while (true) {
-                    if (x == i + 1) {
-                        break;
+                if (ans[i + 1] == 0) {
+                    int x = list.get(i);
+                    int c = 1;
+                    List<Integer> cycle = new ArrayList<>();
+                    while (x != i + 1) {
+                        x = list.get(x - 1);
+                        c++;
+                        cycle.add(x);
                     }
-                    if (map.containsKey(x) && map.get(x).containsKey(i + 1)) {
-                        a += map.get(x).get(i + 1);
-                        break;
+                    cycle.add(x);
+                    for (int k : cycle) {
+                        ans[k] = c;
                     }
-                    a++;
-                    x = list.get(x - 1);
-                    if (!map.containsKey(i + 1)) {
-                        map.put(i + 1, new HashMap<>());
-                    }
-                    map.get(i + 1).put(x, a);
                 }
-                ans.add(a);
             }
 
-            for (int x : ans) {
-                out.print(x + " ");
+            for (int i = 1; i <= n; i++) {
+                out.print(ans[i] + " ");
             }
+
+
             out.println();
         }
 

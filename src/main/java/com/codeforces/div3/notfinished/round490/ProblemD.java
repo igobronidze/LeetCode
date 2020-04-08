@@ -1,9 +1,7 @@
-package com.codeforces.div3.notfinished.round587;
+package com.codeforces.div3.notfinished.round490;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class ProblemD {
 
@@ -16,38 +14,66 @@ public class ProblemD {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
+        int m = scanner.nextInt();
         List<Integer> list = new ArrayList<>();
-        int max = Integer.MIN_VALUE;
+        int[] remainders = new int[m];
+
         for (int i = 0; i < n; i++) {
             int x = scanner.nextInt();
-            max = Math.max(max, x);
             list.add(x);
+            remainders[x % m]++;
         }
 
-        int x = max - list.get(0);
-        for (int i = 1; i < n; i++) {
-            x = gcd(x, max - list.get(i));
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        int index = 1;
+        for (int i = 0; i < m; i++) {
+            if (i == index) {
+                index = (i + 1) % m;
+            }
+            while (remainders[i] > n / m) {
+                if (remainders[index] < n / m) {
+                    if (!map.containsKey(i)) {
+                        map.put(i, new ArrayList<>());
+                    }
+                    map.get(i).add(index);
+                    remainders[i]--;
+                    remainders[index]++;
+                } else {
+                    index++;
+                    if (index == m) {
+                        index = 0;
+                    }
+                }
+            }
         }
 
+        List<Integer> ansList = new ArrayList<>();
         long ans = 0;
-        for (int a : list) {
-            ans += (max - a) / x;
+        int[] indexes = new int[m];
+        for (int i = 0; i < n; i++) {
+            int x = list.get(i) % m;
+            if (map.containsKey(x) && indexes[x] < map.get(x).size()) {
+                int k = map.get(x).get(indexes[x]) - x;
+                if (k < 0) {
+                    k = m + map.get(x).get(indexes[x]) - x;
+                }
+                ans += k;
+                ansList.add(list.get(i) + k);
+                indexes[x]++;
+            } else {
+                ansList.add(list.get(i));
+            }
         }
 
-        out.println(ans + " " + x);
+
+        out.println(ans);
+        for (int x : ansList) {
+            out.print(x + " ");
+        }
 
 
 
         out.flush();
-    }
-
-    private static int gcd(int x, int y) {
-        while (y != 0) {
-            int tmp = y;
-            y = x % y;
-            x = tmp;
-        }
-        return x;
     }
 
     private static class MyScanner {
@@ -103,6 +129,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

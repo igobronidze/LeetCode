@@ -1,11 +1,11 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round570;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class ProblemC {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -15,42 +15,50 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        Set<String> set = new HashSet<>();
+        String t = scanner.next();
 
-        long[] sum = new long[powers.size()];
+        set.add(t);
 
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
+        int ans = 0;
+        int size = t.length();
 
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
+        k--;
 
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
+        while (k != 0) {
+            Set<String> tmp = new HashSet<>();
+            for (String s : set) {
+                for (int i = 0; i < s.length(); i++) {
+                    String str = s.substring(0, i) + s.substring(i + 1);
+                    if (!tmp.contains(str)) {
+                        tmp.add(str);
+                        k--;
+                        ans = ans + (size - str.length());
+                        if (k == 0) {
+                            break;
+                        }
                     }
                 }
+                if (k == 0) {
+                    break;
+                }
             }
-            out.println(ans);
+            if (k == 0) {
+                break;
+            }
+            set = tmp;
+            if (set.isEmpty()) {
+                break;
+            }
         }
 
-
+        if (k == 0) {
+            out.println(ans);
+        } else {
+            out.println(-1);
+        }
 
 
 
@@ -110,6 +118,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

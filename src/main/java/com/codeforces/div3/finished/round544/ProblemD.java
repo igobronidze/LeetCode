@@ -1,9 +1,7 @@
-package com.codeforces.div3.notfinished.round587;
+package com.codeforces.div3.finished.round544;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class ProblemD {
 
@@ -16,32 +14,44 @@ public class ProblemD {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        List<Integer> list = new ArrayList<>();
-        int max = Integer.MIN_VALUE;
+        List<Integer> a = new ArrayList<>();
+        List<Integer> b = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            int x = scanner.nextInt();
-            max = Math.max(max, x);
-            list.add(x);
+            a.add(scanner.nextInt());
+        }
+        for (int i = 0; i < n; i++) {
+            b.add(scanner.nextInt());
         }
 
-        int x = max - list.get(0);
-        for (int i = 1; i < n; i++) {
-            x = gcd(x, max - list.get(i));
+        Map<Pair<Integer, Integer>, Integer> map = new HashMap<>();
+        int x = 0;
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            Pair<Integer, Integer> pair = null;
+            if (a.get(i) == 0 && b.get(i) == 0) {
+                x++;
+            } else if (b.get(i) == 0) {
+                pair = new Pair<>(0, 1);
+            } else if (a.get(i) != 0) {
+                int gcd = getGCD(a.get(i), b.get(i));
+                pair = new Pair<>(a.get(i) / gcd, b.get(i) / gcd);
+            }
+            if (pair != null) {
+                if (!map.containsKey(pair)) {
+                    map.put(pair, 0);
+                }
+                map.put(pair, map.get(pair) + 1);
+                ans = Math.max(ans, map.get(pair));
+            }
         }
 
-        long ans = 0;
-        for (int a : list) {
-            ans += (max - a) / x;
-        }
-
-        out.println(ans + " " + x);
-
+        out.println(ans + x);
 
 
         out.flush();
     }
 
-    private static int gcd(int x, int y) {
+    private static int getGCD(int x, int y) {
         while (y != 0) {
             int tmp = y;
             y = x % y;
@@ -103,6 +113,37 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair<?, ?> pair = (Pair<?, ?>) o;
+            return Objects.equals(first, pair.first) &&
+                    Objects.equals(second, pair.second);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -1,11 +1,11 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round494;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemC {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -15,42 +15,51 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
+        int n = scanner.nextInt();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextLine());
+        }
+
+        int[][] sizes = new int[n + 1][n + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                int s = 0;
+                for (int k = i; k <= j; k++) {
+                    s += list.get(k).length();
+                }
+                sizes[i][j] = s;
             }
-        } catch (ArithmeticException ignored) {}
-
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
+        }
+        boolean[][] equals = new boolean[n + 1][n + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < n; j++) {
+                if (list.get(i).equals(list.get(j))) {
+                    equals[i][j] = true;
                 }
             }
-            out.println(ans);
         }
 
 
+        int ans = 0;
+        for (int size = 1; size <= n / 2; size++) {
+            for (int i = size - 1; i < n; i++) {
+                for (int j = i + size; j < n; j++) {
+                    boolean equal = true;
+                    for (int k = 0; k < size; k++) {
+                        if (!equals[i - k][j - k]) {
+                            equal = false;
+                            break;
+                        }
+                    }
+                    if (equal) {
+                        ans = Math.max(ans, (sizes[i][i + size - 1] - size + size - 1) * 2);
+                    }
+                }
+            }
+        }
+
+        out.println(sizes[0][n - 1] + (n - 1) - ans);
 
 
 
@@ -110,6 +119,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

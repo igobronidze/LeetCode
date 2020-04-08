@@ -1,11 +1,11 @@
-package com.codeforces.div3.notfinished.round587;
+package com.codeforces.div3.notfinished.round535;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemE_1 {
 
     public static InputStream inputStream = System.in;
 
@@ -15,44 +15,56 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
         List<Integer> list = new ArrayList<>();
-        list.add(1);
-        for (int i = 1; i < 1000000; i++) {
-            list.add(list.get(i - 1) + Integer.toString(i).length());
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
         }
 
-        List<Long> sum = new ArrayList<>();
-        sum.add(1L);
-        for (int i = 1; i < list.size(); i++) {
-            sum.add(sum.get(i - 1) + list.get(i));
+        List<Pair<Integer, Integer>> pairs = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            pairs.add(new Pair<>(scanner.nextInt() - 1, scanner.nextInt() - 1));
         }
 
-        int q = scanner.nextInt();
-        for (int i = 0; i < q; i++) {
-            long x = scanner.nextLong();
-            if (x == 1L) {
-                out.println(1);
-            } else {
-                for (int j = 1; j < sum.size(); j++) {
-                    if (sum.get(j) <= x && sum.get(j + 1) > x) {
-                        long y = x - sum.get(j - 1);
-                        long s = 0;
-                        int k = 1;
-                        while (true) {
-                            String kStr = Integer.toString(k);
-                            if (s + kStr.length() >= y) {
-                                long p = y - s;
-                                out.println(kStr.charAt((int)p - 1));
-                                break;
-                            } else {
-                                s = s + kStr.length();
-                            }
-                            k++;
-                        }
-                        break;
+        int ind = 0;
+        int ans = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            List<Integer> copy = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                copy.add(list.get(j));
+            }
+
+            for (int j = 0; j < m; j++) {
+                if (pairs.get(j).first > i || pairs.get(j).second < i) {
+                    for (int k = pairs.get(j).first; k <= pairs.get(j).second; k++) {
+                        copy.set(k, copy.get(k) - 1);
                     }
                 }
             }
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+            for (int x : copy) {
+                min = Math.min(min, x);
+                max = Math.max(max, x);
+            }
+            if (max - min > ans) {
+                ans = max - min;
+                ind = i;
+            }
+        }
+
+        out.println(ans);
+        List<Integer> ansList = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            if (pairs.get(i).first > ind || pairs.get(i).second < ind) {
+                ansList.add(i + 1);
+            }
+        }
+
+        out.println(ansList.size());
+        for (int x : ansList) {
+            out.print(x + " ");
         }
 
 
@@ -107,12 +119,28 @@ public class ProblemE {
 
         private S second;
 
-        public Pair() {
-        }
+        public Pair() {}
 
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

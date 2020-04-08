@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemC {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -15,42 +15,31 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
+        int n = scanner.nextInt();
+        int c = scanner.nextInt();
+        List<Integer> a = new ArrayList<>();
+        List<Integer> b = new ArrayList<>();
 
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
-                }
-            }
-            out.println(ans);
+        for (int i = 0; i < n - 1; i++) {
+            a.add(scanner.nextInt());
+        }
+        for (int i = 0; i < n - 1; i++) {
+            b.add(scanner.nextInt());
         }
 
+        int[][] dp = new int[n + 1][2];
 
+        dp[1][0] = a.get(0);
+        dp[1][1] = c + b.get(0);
+
+        for (int i = 2; i < n; i++) {
+            dp[i][0] = Math.min(dp[i - 1][0], dp[i - 1][1]) + a.get(i - 1);
+            dp[i][1] = Math.min(dp[i - 1][0] + c + b.get(i - 1), dp[i - 1][1] + b.get(i - 1));
+        }
+
+        for (int i = 0; i < n; i++) {
+            out.print(Math.min(dp[i][0], dp[i][1]) + " ");
+        }
 
 
 
@@ -105,11 +94,30 @@ public class ProblemC {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {
+        }
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

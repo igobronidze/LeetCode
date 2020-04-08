@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round570;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemC {
+public class ProblemG {
 
     public static InputStream inputStream = System.in;
 
@@ -16,40 +14,32 @@ public class ProblemC {
         PrintWriter out = new PrintWriter(outputStream);
 
         int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
-
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
         for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
+            int n = scanner.nextInt();
+            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                if (!map.containsKey(x)) {
+                    map.put(x, new Pair<>(0, 0));
                 }
+                Pair<Integer, Integer> pair = map.get(x);
+                pair.first++;
+                pair.second += y;
+                map.put(x, pair);
             }
-            out.println(ans);
-        }
 
+            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
+            Collections.sort(countOfTypes, (a, b) -> {
+                int k = Integer.compare(b.first, a.first);
+                if (k == 0) {
+                    k = Integer.compare(b.second, a.second);
+                }
+                return k;
+            });
+
+
+        }
 
 
 
@@ -110,6 +100,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

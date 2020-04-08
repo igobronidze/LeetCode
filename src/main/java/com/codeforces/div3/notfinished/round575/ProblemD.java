@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round575;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemC {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -16,35 +14,37 @@ public class ProblemC {
         PrintWriter out = new PrintWriter(outputStream);
 
         int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
-
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
         for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
+            int n = scanner.nextInt();
+            int k = scanner.nextInt();
+            String s = scanner.next();
 
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
+            int ans = Integer.MAX_VALUE;
+            int[][] dp = new int[n + 3][3];
+            for (int i = 0; i < 3; i++) {
+                char c = getChar(i);
+                int x = 0;
+                for (int j = 0; j < k; j++) {
+                    if (s.charAt(j) != c) {
+                        x++;
                     }
+                    c = getNext(c);
+                }
+                dp[k - 1][i] = x;
+                ans = Math.min(ans, x);
+            }
+            for (int i = k; i < n; i++) {
+                for (int j = 0; j < 3; j++) {
+                    int ind = (j + 2) % 3;
+                    int x = dp[i - 1][ind];
+                    if (s.charAt(i - k) != getChar(ind)) {
+                        x--;
+                    }
+                    if (s.charAt(i) != getChar((j + k - 1) % 3)) {
+                        x++;
+                    }
+                    dp[i][j] = x;
+                    ans = Math.min(ans, x);
                 }
             }
             out.println(ans);
@@ -52,9 +52,27 @@ public class ProblemC {
 
 
 
-
-
         out.flush();
+    }
+
+    private static char getChar(int i) {
+        if (i == 0) {
+            return 'R';
+        }
+        if (i == 1) {
+            return 'G';
+        }
+        return 'B';
+    }
+
+    private static char getNext(char c) {
+        if (c == 'R') {
+            return 'G';
+        }
+        if (c == 'G') {
+            return 'B';
+        }
+        return 'R';
     }
 
     private static class MyScanner {
@@ -110,6 +128,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

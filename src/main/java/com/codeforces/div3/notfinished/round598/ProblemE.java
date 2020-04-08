@@ -1,12 +1,9 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round598;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemD {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -17,50 +14,55 @@ public class ProblemD {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        int m = 200002;
-        int[] points = new int[m];
-        List<Pair<Integer, Integer>>[] segments = new ArrayList[m];
+        List<Pair<Integer, Integer>> list = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            int l = scanner.nextInt();
-            int r = scanner.nextInt();
-            points[l]++;
-            points[r + 1]--;
-            if (segments[l] == null) {
-                segments[l] = new ArrayList<>();
-            }
-            segments[l].add(new Pair<>(r, i + 1));
+            list.add(new Pair<>(scanner.nextInt(), i));
         }
 
-        for (int i = 1; i < points.length; i++) {
-            points[i] += points[i - 1];
+        int[] ans = new int[n + 1];
+
+        Collections.sort(list, Comparator.comparingInt(a -> a.first));
+
+        Pair<Long, Integer>[] dp = new Pair[n + 1];
+        dp[2] = new Pair<>((long) list.get(2).first - list.get(0).first, 3);
+        if (n > 3) {
+            dp[3] = new Pair<>((long) list.get(3).first - list.get(0).first, 4);
+        }
+        if (n > 4) {
+            dp[4] = new Pair<>((long) list.get(4).first - list.get(0).first, 5);
         }
 
-        List<Integer> ans = new ArrayList<>();
-        PriorityQueue<Pair<Integer, Integer>> segmentEnds = new PriorityQueue<>((a, b) -> Integer.compare(b.first, a.first));
-        PriorityQueue<Integer> removedEnds = new PriorityQueue<>();
-        for (int i = 1; i < m; i++) {
-            if (segments[i] != null) {
-                for (Pair<Integer, Integer> pair : segments[i]) {
-                    segmentEnds.add(pair);
+        for (int i = 5; i < n; i++) {
+            long min = Long.MAX_VALUE;
+            int x = 0;
+            for (int k = 3; k <= 5; k++) {
+                long s = Long.MAX_VALUE;
+                if (dp[i - k] != null) {
+                    s = dp[i - k].first + (list.get(i).first - list.get(i - k + 1).first);
+                }
+                if (s < min) {
+                    min = s;
+                    x = k;
                 }
             }
-
-            while (points[i] - removedEnds.size() > k) {
-                Pair<Integer, Integer> pair = segmentEnds.poll();
-                removedEnds.add(pair.first);
-                ans.add(pair.second);
-            }
-
-            while (!removedEnds.isEmpty() && removedEnds.peek() == i) {
-                removedEnds.poll();
-            }
+            dp[i] = new Pair<>(min, x);
         }
 
-        out.println(ans.size());
-        for (int x : ans) {
-            out.print(x + " ");
+        int ind = n - 1;
+        int x = 1;
+        while (ind > 0) {
+            for (int i = ind; i > ind - dp[ind].second; i--) {
+                ans[list.get(i).second] = x;
+            }
+            ind = ind - dp[ind].second;
+            x++;
         }
+
+        out.println(dp[n - 1].first + " " + (x - 1));
+        for (int i = 0; i < n; i++) {
+            out.print(ans[i] + " ");
+        }
+
 
 
         out.flush();
@@ -119,6 +121,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

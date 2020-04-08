@@ -1,8 +1,6 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round575;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class ProblemC {
@@ -15,41 +13,40 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
+        int min = -100_000;
+        int max = 100_000;
+
         int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
-
-        long[] sum = new long[powers.size()];
-
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
         for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
+            int n = scanner.nextInt();
+            int minX = min, maxX = max, minY = min, maxY = max;
+            for (int i = 0; i < n; i++) {
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
 
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
+                int f1 = scanner.nextInt();
+                int f2 = scanner.nextInt();
+                int f3 = scanner.nextInt();
+                int f4 = scanner.nextInt();
+                if (f1 == 0) {
+                    minX = Math.max(minX, x);
+                }
+                if (f2 == 0) {
+                    maxY = Math.min(maxY, y);
+                }
+                if (f3 == 0) {
+                    maxX = Math.min(maxX, x);
+                }
+                if (f4 == 0) {
+                    minY = Math.max(minY, y);
                 }
             }
-            out.println(ans);
+            if (minX > maxX || minY > maxY) {
+                out.println(0);
+            } else {
+                out.println("1 " + minX + " " + minY);
+            }
         }
-
 
 
 
@@ -110,6 +107,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

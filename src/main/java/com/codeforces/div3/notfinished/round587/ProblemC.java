@@ -26,33 +26,88 @@ public class ProblemC {
         int x6 = scanner.nextInt();
         int y6 = scanner.nextInt();
 
-        if (x1 < x3 && x1 < x5) {
-            out.println("YES");
-        } else if (x2 > x4 && x2 > x6) {
-            out.println("YES");
-        } else if (y1 < y3 && y1 < y5) {
-            out.println("YES");
-        } else if (y2 > y4 && y2 > y6) {
-            out.println("YES");
-        } else {
-            if (x4 > x6 && x3 > x6) {
-                out.println("YES");
-            } else if (x6 > x4 && x5 > x4) {
-                out.println("YES");
-            } else if (y4 > y6 && y3 > y6) {
-                out.println("YES");
-            } else if (y6 > y4 && y5 > y4) {
-                out.println("YES");
-            } else {
-                out.println("NO");
-            }
+        Rec r1 = new Rec(y2, y1, x1, x2);
+        Rec r2 = new Rec(y4, y3, x3, x4);
+        Rec r3 = new Rec(y6, y5, x5, x6);
+
+        if (r2.left <= r1.left && r2.right >= r1.right && r2.top >= r1.top && r2.bottom <= r1.bottom) {
+            out.println("NO");
+            out.flush();
+            return;
         }
 
+        if (r3.left <= r1.left && r3.right >= r1.right && r3.top >= r1.top && r3.bottom <= r1.bottom) {
+            out.println("NO");
+            out.flush();
+            return;
+        }
+
+        if (r2.right < r3.left && r1.left < r3.left) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+        if (r3.right < r2.left && r1.left < r2.left) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+        if (r2.bottom > r3.top && r1.top > r3.top) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+        if (r3.bottom > r2.top && r1.top > r2.top) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+
+        if ((r1.top > r2.top || r1.right > r2.right) && (r1.top > r3.top || r1.right > r3.right)) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+        if ((r1.top > r2.top || r1.left < r2.left) && (r1.top > r3.top || r1.left < r3.left)) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+        if ((r1.bottom < r2.bottom || r1.right > r2.right) && (r1.bottom < r3.bottom || r1.right > r3.right)) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+        if ((r1.bottom < r2.bottom || r1.left < r2.left) && (r1.bottom < r3.bottom || r1.left < r3.left)) {
+            out.println("YES");
+            out.flush();
+            return;
+        }
+
+        out.println("NO");
 
 
 
 
         out.flush();
+    }
+
+    private static class Rec {
+
+        private int top;
+
+        private int bottom;
+
+        private int left;
+
+        private int right;
+
+        private Rec(int top, int bottom, int left, int right) {
+            this.top = top;
+            this.bottom = bottom;
+            this.left = left;
+            this.right = right;
+        }
     }
 
     private static class MyScanner {
@@ -103,7 +158,8 @@ public class ProblemC {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

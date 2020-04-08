@@ -1,8 +1,6 @@
-package com.codeforces.div3.notfinished.round595;
+package com.codeforces.div3.notfinished.round490;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class ProblemC {
@@ -15,42 +13,44 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        List<Long> powers = new ArrayList<>();
-        long x = 1;
-        try {
-            for (int i = 1; i < 50; i++) {
-                powers.add(x);
-                x = Math.multiplyExact(x, 3);
-            }
-        } catch (ArithmeticException ignored) {}
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        String s = scanner.next();
 
-        long[] sum = new long[powers.size()];
+        int[] cc = new int['z' + 1];
 
-        sum[0] = powers.get(0);
-        try {
-            for (int i = 1; i < powers.size(); i++) {
-                sum[i] = Math.addExact(sum[i - 1], powers.get(i));
-            }
-        } catch (ArithmeticException ignored) {}
-
-        for (int p = 0; p < t; p++) {
-            long n = scanner.nextLong();
-
-            long ans = 0;
-            while (n > 0) {
-                for (int i = 0; i < powers.size(); i++) {
-                    if (sum[i] >= n) {
-                        n = n - powers.get(i);
-                        ans = ans + powers.get(i);
-                        break;
-                    }
-                }
-            }
-            out.println(ans);
+        for (int i = 0; i < n; i++) {
+            cc[s.charAt(i)]++;
         }
 
+        int ind = 'a' - 1;
+        int sum = 0;
+        int x = 0;
+        for (int i = 'a'; i <= 'z'; i++) {
+            sum += cc[i];
+            if (k < sum) {
+                x = sum - k;
+                break;
+            } else {
+                ind = i;
+            }
+        }
 
+        StringBuilder ans = new StringBuilder();
+        for (int i = n - 1; i >= 0; i--) {
+            if (s.charAt(i) == ind + 1) {
+                if (x > 0) {
+                    ans.append(s.charAt(i));
+                    x--;
+                }
+            } else if (s.charAt(i) > ind + 1) {
+                ans.append(s.charAt(i));
+            }
+        }
+
+        for (int i = ans.length() - 1; i >= 0; i--) {
+            out.print(ans.charAt(i));
+        }
 
 
 
@@ -110,6 +110,23 @@ public class ProblemC {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }
