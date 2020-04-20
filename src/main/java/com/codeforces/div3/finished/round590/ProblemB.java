@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round590;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -15,29 +18,26 @@ public class ProblemE {
 
         int n = scanner.nextInt();
         int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        Set<Integer> set = new HashSet<>();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            if (!set.contains(x)) {
+                if (linkedList.size() == k) {
+                    int y = linkedList.removeLast();
+                    set.remove(y);
+                    linkedList.addFirst(x);
+                } else {
+                    linkedList.addFirst(x);
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
             }
+            set.add(x);
         }
 
-
-
+        out.println(linkedList.size());
+        while (!linkedList.isEmpty()) {
+            out.print(linkedList.poll() + " ");
+        }
 
 
         out.flush();
@@ -96,6 +96,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

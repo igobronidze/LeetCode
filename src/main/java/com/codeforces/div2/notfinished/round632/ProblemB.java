@@ -1,11 +1,11 @@
-package com.codeforces.div3.notfinished.round555;
+package com.codeforces.div2.notfinished.round632;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemD {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -15,48 +15,49 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        List<Integer> ans = new ArrayList<>();
-        long s = 0;
-        for (int i = 1; i <= k; i++) {
-            s = s + i;
-            ans.add(i);
-        }
-        if (s > n) {
-            out.println("NO");
-        } else {
-            n = n - (int) s;
-            for (int i = 0; i < k; i++) {
-                ans.set(i, ans.get(i) + n / k);
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> a = new ArrayList<>();
+            List<Integer> b = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                a.add(scanner.nextInt());
             }
-            n = n % k;
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
+            for (int i = 0; i < n; i++) {
+                b.add(scanner.nextInt());
             }
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
-            }
-            if (n > 0) {
+            if (!a.get(0).equals(b.get(0))) {
                 out.println("NO");
             } else {
-                out.println("YES");
-                for (int x : ans) {
-                    out.print(x + " ");
+                boolean b1 = false;
+                boolean b2 = false;
+                if (a.get(0) > 0) {
+                    b1 = true;
+                }
+                if (a.get(0) < 0) {
+                    b2 = true;
+                }
+                boolean cant = false;
+                for (int i = 1; i < n; i++) {
+                    if (b.get(i) > a.get(i) && !b1) {
+                        cant = true;
+                        break;
+                    }
+                    if (b.get(i) < a.get(i) && !b2) {
+                        cant = true;
+                        break;
+                    }
+                    if (a.get(i) > 0) {
+                        b1 = true;
+                    }
+                    if (a.get(i) < 0) {
+                        b2 = true;
+                    }
+                }
+                if (cant) {
+                    out.println("NO");
+                } else {
+                    out.println("YES");
                 }
             }
         }
@@ -120,6 +121,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -16,35 +16,99 @@ public class ProblemC {
         int n = scanner.nextInt();
         int[] arr = new int[1001];
 
-        for (int i = 0; i < n ; i++) {
+        for (int i = 0; i < n * n; i++) {
             arr[scanner.nextInt()]++;
         }
 
         int[][] ans = new int[n + 1][n + 1];
 
         boolean cant = false;
-        if (n % 2 == 0) {
-            for (int i = 1; i <= 1000; i++) {
-                if (arr[i] % 4 != 0) {
-                    if (arr[i] % 2 == 0) {
+        int ind = 0;
+        for (int i = 0; i < n /2; i++) {
+            for (int j = 0; j < n / 2; j++) {
+                while (arr[ind] < 4) {
+                    ind++;
+                    if (ind == 1001) {
+                        break;
+                    }
+                }
+                if (ind == 1001) {
+                    cant = true;
+                    break;
+                } else {
+                    ans[i][j] = ind;
+                    ans[i][n - j - 1] = ind;
+                    ans[n - i - 1][j] = ind;
+                    ans[n - i - 1][n - j - 1] = ind;
+                    arr[ind] -= 4;
+                }
+            }
+            if (cant) {
+                break;
+            }
+        }
 
+        if (n % 2 == 1) {
+            ind = 0;
+            for (int i = 0; i < n / 2; i++) {
+                while (arr[ind] < 2) {
+                    ind++;
+                    if (ind == 1001) {
+                        break;
+                    }
+                }
+                if (ind == 1001) {
+                    cant = true;
+                    break;
+                } else {
+                    ans[i][n / 2] = ind;
+                    ans[n - i - 1][n / 2] = ind;
+                    arr[ind] -= 2;
+                }
+            }
+
+            if (!cant) {
+                ind = 0;
+                for (int i = 0; i < n / 2; i++) {
+                    while (arr[ind] < 2) {
+                        ind++;
+                        if (ind == 1001) {
+                            break;
+                        }
+                    }
+                    if (ind == 1001) {
+                        cant = true;
+                        break;
+                    } else {
+                        ans[n / 2][i] = ind;
+                        ans[n / 2][n - i - 1] = ind;
+                        arr[ind] -= 2;
                     }
                 }
             }
-        } else {
-            for (int i = 1; i <= 1000; i++) {
-                if (arr[i] % 4 != 0) {
-                    cant = true;
-                    break;
+
+            if (!cant) {
+                for (int i = 1; i <= 1000; i++) {
+                    if (arr[i] == 1) {
+                        ans[n / 2][n / 2] = i;
+                        break;
+                    }
                 }
             }
         }
 
-        for (int i = 0; i < n ; i++) {
-            for (int j = 0; j < n; j++) {
-
+        if (cant) {
+            out.println("NO");
+        } else {
+            out.println("YES");
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    out.print(ans[i][j] + " ");
+                }
+                out.println();
             }
         }
+
 
 
 

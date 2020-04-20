@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round490;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -14,33 +14,27 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        String s = scanner.next();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        for (int i = 2; i <= n; i++) {
+            if (n % i == 0) {
+                s = reverse(s.substring(0, i)) + s.substring(i);
             }
         }
 
-
+        out.println(s);
 
 
 
         out.flush();
+    }
+
+    private static String reverse(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i--) {
+            sb.append(s.charAt(i));
+        }
+        return sb.toString();
     }
 
     private static class MyScanner {
@@ -96,6 +90,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

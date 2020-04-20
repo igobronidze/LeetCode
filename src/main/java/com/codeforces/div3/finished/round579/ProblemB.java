@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round579;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,29 +16,34 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < 4 * n; i++) {
+                list.add(scanner.nextInt());
+            }
+            Collections.sort(list);
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+            boolean cant = false;
+            int s = list.get(0) * list.get(list.size() - 1);
+            for (int i = 0; i < 2 * n; i += 2) {
+                if (!list.get(i).equals(list.get(i + 1))) {
+                    cant = true;
                 }
-                if (j == k + 1) {
-                    j = 1;
+                if (!list.get(4 * n - i - 1).equals(list.get(4 * n - i - 2))) {
+                    cant = true;
                 }
-                n--;
+                if (list.get(i) * list.get(4 * n - i - 1) != s) {
+                    cant = true;
+                }
+            }
+            if (cant) {
+                out.println("NO");
+            } else {
+                out.println("YES");
             }
         }
-
 
 
 
@@ -96,6 +104,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

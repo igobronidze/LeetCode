@@ -1,9 +1,10 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round490;
 
 import java.io.*;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -15,29 +16,33 @@ public class ProblemE {
 
         int n = scanner.nextInt();
         int k = scanner.nextInt();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            linkedList.add(scanner.nextInt());
+        }
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        int ans = 0;
+        while (!linkedList.isEmpty()) {
+            int x = linkedList.removeFirst();
+            if (x <= k) {
+                ans++;
+            } else {
+                break;
             }
         }
 
 
+        while (!linkedList.isEmpty()) {
+            int x = linkedList.removeLast();
+            if (x <= k) {
+                ans++;
+            } else {
+                break;
+            }
+        }
 
+
+        out.println(ans);
 
 
         out.flush();
@@ -96,6 +101,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

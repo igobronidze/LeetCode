@@ -1,4 +1,4 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round552;
 
 import java.io.*;
 import java.util.*;
@@ -13,54 +13,59 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
+        int n = scanner.nextInt();
+        int m = 10_000_000;
+        Pair<Integer, Integer>[] map = new Pair[m + 1];
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            Pair<Integer, Integer> pair = map[x];
+            if (pair == null) {
+                map[x] = new Pair<>(i + 1, 0);
+            } else if (pair.second == 0) {
+                pair.second = i + 1;
             }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
         }
 
+        long ans = Long.MAX_VALUE;
+        int ff = 0, ss = 0;
+        Integer first = null, second = null;
+        for (int i = 1; i <= m; i++) {
+            first = null;
+            second = null;
+            for (int k = i; k <= m; k += i) {
+                Pair<Integer, Integer> pair = map[k];
+                if (pair != null) {
+                    if (first == null) {
+                        if (pair.second != 0) {
+                            first = k;
+                            second = k;
+                            break;
+                        } else {
+                            first = k;
+                        }
+                    } else {
+                        second = k;
+                        break;
+                    }
+                }
+            }
+            if (second != null) {
+                long s = (long)first * second / i;
+                if (ans > s) {
+                    ans = s;
+                    ff = first;
+                    ss = second;
+                }
+            }
+        }
 
+        if (ff == ss) {
+            out.println(map[ff].first + " " + map[ss].second);
+        } else {
+            int x = map[ff].first;
+            int y = map[ss].first;
+            out.println(Math.min(x, y) + " " + Math.max(x, y));
+        }
 
 
         out.flush();

@@ -1,8 +1,6 @@
-package com.codeforces.div3.notfinished.round555;
+package com.codeforces.div3.finished.round575;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class ProblemD {
@@ -15,56 +13,66 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        List<Integer> ans = new ArrayList<>();
-        long s = 0;
-        for (int i = 1; i <= k; i++) {
-            s = s + i;
-            ans.add(i);
-        }
-        if (s > n) {
-            out.println("NO");
-        } else {
-            n = n - (int) s;
-            for (int i = 0; i < k; i++) {
-                ans.set(i, ans.get(i) + n / k);
-            }
-            n = n % k;
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
-            }
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
-            }
-            if (n > 0) {
-                out.println("NO");
-            } else {
-                out.println("YES");
-                for (int x : ans) {
-                    out.print(x + " ");
-                }
-            }
-        }
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            int k = scanner.nextInt();
+            String s = scanner.next();
 
+            int ans = Integer.MAX_VALUE;
+            int[][] dp = new int[n + 3][3];
+            for (int i = 0; i < 3; i++) {
+                char c = getChar(i);
+                int x = 0;
+                for (int j = 0; j < k; j++) {
+                    if (s.charAt(j) != c) {
+                        x++;
+                    }
+                    c = getNext(c);
+                }
+                dp[k - 1][i] = x;
+                ans = Math.min(ans, x);
+            }
+            for (int i = k; i < n; i++) {
+                for (int j = 0; j < 3; j++) {
+                    int ind = (j + 2) % 3;
+                    int x = dp[i - 1][ind];
+                    if (s.charAt(i - k) != getChar(ind)) {
+                        x--;
+                    }
+                    if (s.charAt(i) != getChar((j + k - 1) % 3)) {
+                        x++;
+                    }
+                    dp[i][j] = x;
+                    ans = Math.min(ans, x);
+                }
+            }
+            out.println(ans);
+        }
 
 
 
         out.flush();
+    }
+
+    private static char getChar(int i) {
+        if (i == 0) {
+            return 'R';
+        }
+        if (i == 1) {
+            return 'G';
+        }
+        return 'B';
+    }
+
+    private static char getNext(char c) {
+        if (c == 'R') {
+            return 'G';
+        }
+        if (c == 'G') {
+            return 'B';
+        }
+        return 'R';
     }
 
     private static class MyScanner {
@@ -120,6 +128,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round498;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -14,29 +14,37 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        String s = scanner.next();
+        String t = scanner.next();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        int ans = 0;
+        for (int i = 0; i < n / 2; i++) {
+            int j = n - i - 1;
+            if (s.charAt(i) == t.charAt(i) && s.charAt(j) == t.charAt(j)) {
+                continue;
+            }
+            if (s.charAt(i) == t.charAt(j) && s.charAt(j) == t.charAt(i)) {
+                continue;
+            }
+            if (s.charAt(i) == s.charAt(j) && t.charAt(i) == t.charAt(j)) {
+                continue;
+            }
+            if (s.charAt(i) == t.charAt(i) || s.charAt(i) == t.charAt(j) || s.charAt(j) == t.charAt(i) || s.charAt(j) == t.charAt(j)) {
+                ans++;
+            } else if (t.charAt(i) == t.charAt(j)) {
+                ans++;
+            } else {
+                ans += 2;
             }
         }
 
+        if (n % 2 == 1) {
+            if (s.charAt(n / 2) != t.charAt(n / 2)) {
+                ans++;
+            }
+        }
 
+        out.println(ans);
 
 
 
@@ -96,6 +104,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

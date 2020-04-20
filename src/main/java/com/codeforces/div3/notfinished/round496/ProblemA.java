@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round496;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -14,28 +16,23 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
-            }
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
         }
 
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (list.get(i) == 1 && i != 0) {
+                ans.add(list.get(i - 1));
+            }
+        }
+        ans.add(list.get(n - 1));
+
+        out.println(ans.size());
+        for (int x : ans) {
+            out.print(x + " ");
+        }
 
 
 
@@ -96,6 +93,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

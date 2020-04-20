@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round579;
 
 import java.io.*;
 import java.util.*;
 
-public class ProblemG {
+public class ProblemF_2 {
 
     public static InputStream inputStream = System.in;
 
@@ -13,52 +13,60 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
+        int n = scanner.nextInt();
+        int r = scanner.nextInt();
+
+        List<Pair<Integer, Integer>> positives = new ArrayList<>();
+        List<Pair<Integer, Integer>> negatives = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            if (y >= 0) {
+                positives.add(new Pair<>(x, y));
+            } else {
+                negatives.add(new Pair<>(x, y));
             }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
         }
+
+        Collections.sort(positives, Comparator.comparingInt(x -> x.first));
+        int ans = 0;
+        for (Pair<Integer, Integer> pair : positives) {
+            if (pair.first > r) {
+                break;
+            } else {
+                ans++;
+                r = r + pair.second;
+            }
+        }
+
+        List<Pair<Integer, Integer>> list = new ArrayList<>();
+        for (int i = 0; i < negatives.size(); i++) {
+            list.add(new Pair<>(negatives.get(i).first + negatives.get(i).second, i));
+        }
+        Collections.sort(list, Comparator.comparingInt(x -> x.first));
+        Collections.reverse(list);
+
+        int[][] dp = new int[n + 1][r + 1];
+
+        int max = 0;
+        for (int i = 0; i < negatives.size(); i++) {
+            int ind = list.get(i).second;
+            for (int j = 0; j <= r; j++) {
+                if (i != 0) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);
+                }
+                if (j - negatives.get(ind).second <= r && j - negatives.get(ind).second >= negatives.get(ind).first) {
+                    int x = 0;
+                    if (i != 0) {
+                        x = dp[i - 1][j - negatives.get(ind).second];
+                    }
+                    dp[i][j] = Math.max(dp[i][j], x + 1);
+                }
+                max = Math.max(max, dp[i][j]);
+            }
+        }
+
+        out.println(ans + max);
 
 
 

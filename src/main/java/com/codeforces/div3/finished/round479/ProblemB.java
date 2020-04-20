@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round479;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -14,30 +16,22 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        String s = scanner.next();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        Map<String, Integer> map = new HashMap<>();
+        String ans = "" + s.charAt(0) + s.charAt(1);
+        for (int i = 0; i < n - 1; i++) {
+            String str = "" + s.charAt(i) + s.charAt(i + 1);
+            if (!map.containsKey(str)) {
+                map.put(str, 0);
+            }
+            map.put(str, map.get(str) + 1);
+            if (map.get(ans) < map.get(str)) {
+                ans = str;
             }
         }
 
-
-
+        out.println(ans);
 
 
         out.flush();

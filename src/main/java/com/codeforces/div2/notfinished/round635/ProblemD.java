@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div2.notfinished.round635;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 
-public class ProblemG {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -15,55 +18,69 @@ public class ProblemG {
 
         int t = scanner.nextInt();
         for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
+            int r = scanner.nextInt();
+            int g = scanner.nextInt();
+            int b = scanner.nextInt();
+            List<Integer> rList = new ArrayList<>();
+            List<Integer> gList = new ArrayList<>();
+            List<Integer> bList = new ArrayList<>();
+            for (int i = 0; i < r; i++) {
                 int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
+                rList.add(x);
             }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
+            for (int i = 0; i < g; i++) {
+                int x = scanner.nextInt();
+                gList.add(x);
             }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
+            for (int i = 0; i < b; i++) {
+                int x = scanner.nextInt();
+                bList.add(x);
             }
+            TreeSet<Integer> rSet = new TreeSet<>(rList);
+            TreeSet<Integer> gSet = new TreeSet<>(gList);
+            TreeSet<Integer> bSet = new TreeSet<>(bList);
+            long ans = Long.MAX_VALUE;
+            ans = Math.min(ans, solve(rList, bSet, gSet));
+            ans = Math.min(ans, solve(rList, gSet, bSet));
+            ans = Math.min(ans, solve(bList, rSet, gSet));
+            ans = Math.min(ans, solve(bList, gSet, rSet));
+            ans = Math.min(ans, solve(gList, rSet, bSet));
+            ans = Math.min(ans, solve(gList, bSet, rSet));
 
-            out.println(count + " " + good);
-
+            out.println(ans);
         }
 
 
 
 
         out.flush();
+    }
+
+    private static long solve(List<Integer> list, TreeSet<Integer> set1, TreeSet<Integer> set2) {
+        Long ans = Long.MAX_VALUE;
+        Integer y = null, u1 = null, u2 = null;
+        for (int x : list) {
+            y = set1.higher(x - 1);
+            if (y != null) {
+                int k = (x + y) / 2;
+                u1 = set2.higher(k - 1);
+                u2 = set2.lower(k + 1);
+                if (u1 != null) {
+                    ans = Math.min(ans, f(x, y, u1));
+                }
+                if (u2 != null) {
+                    ans = Math.min(ans, f(x, y, u2));
+                }
+            }
+        }
+        return ans;
+    }
+
+    private static long f(int a, int b, int c) {
+        long s = ((long)a - b) * (a - b);
+        s += ((long)a - c) * (a - c);
+        s += ((long)b - c) * (b - c);
+        return s;
     }
 
     private static class MyScanner {

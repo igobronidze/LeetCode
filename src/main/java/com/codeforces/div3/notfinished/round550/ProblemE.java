@@ -1,6 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round550;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class ProblemE {
@@ -14,30 +17,53 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        String s = scanner.next();
+        String t = scanner.next();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
-            }
+        int m = 'z' - 'a' + 1;
+
+        List<Integer> first = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            first.add(s.charAt(i) - 'a');
+        }
+        List<Integer> second = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            second.add(t.charAt(i) - 'a');
         }
 
+        List<Integer> sum = new ArrayList<>();
+        int x = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            x += first.get(i) + second.get(i);
+            if (x >= m) {
+                sum.add(x % m);
+                x = 1;
+            } else {
+                sum.add(x);
+                x = 0;
+            }
+        }
+        if (x != 0) {
+            sum.add(x);
+        }
+        Collections.reverse(sum);
 
+        List<Integer> ans = new ArrayList<>();
+        x = 0;
+        if (sum.size() == n) {
+            x = 0;
+        } else {
+            x = m;
+        }
+        for (int i = sum.size() == n ? 0 : 1; i < sum.size(); i++) {
+            x += sum.get(i);
+            ans.add(x / 2);
+            x = m * (x % 2);
+        }
 
+        for (int i = 0; i < ans.size(); i++) {
+            out.print((char)(ans.get(i) + 'a'));
+        }
 
 
         out.flush();
@@ -96,6 +122,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

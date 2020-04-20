@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round579;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemD_2 {
 
     public static InputStream inputStream = System.in;
 
@@ -13,34 +15,55 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        String s = scanner.next();
+        String t = scanner.next();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 0);
+        int j = 0;
+        for (int i = 0; i < t.length(); i++) {
+            while (true) {
+                if (t.charAt(i) == s.charAt(j)) {
+                    j++;
+                    map.put(i + 1, j);
+                    break;
+                } else {
                     j++;
                 }
-                if (j == k + 1) {
-                    j = 1;
+            }
+        }
+
+        s = reverse(s);
+        t = reverse(t);
+        j = 0;
+        int ans = s.length() - map.get(t.length());
+        for (int i = 0; i < t.length(); i++) {
+            while (true) {
+                if (t.charAt(i) == s.charAt(j)) {
+                    j++;
+                    ans = Math.max(ans, s.length() - j - map.get(t.length() - i - 1));
+                    break;
+                } else {
+                    j++;
                 }
-                n--;
             }
         }
 
 
 
+        out.println(ans);
+
 
 
         out.flush();
+    }
+
+    private static String reverse(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = str.length() - 1; i >= 0; i--) {
+            sb.append(str.charAt(i));
+        }
+        return sb.toString();
     }
 
     private static class MyScanner {
@@ -96,6 +119,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

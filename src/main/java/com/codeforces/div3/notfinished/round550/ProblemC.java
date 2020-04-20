@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round550;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -14,29 +17,45 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        int[] count = new int[200007];
+        List<Integer> list = new ArrayList<>();
+        boolean cant = false;
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            count[x]++;
+            if (count[x] > 2) {
+                cant = true;
             }
         }
 
+        if (cant) {
+            out.println("NO");
+        } else {
+            out.println("YES");
+            Collections.sort(list);
+            List<Integer> increase = new ArrayList<>();
+            List<Integer> decrease = new ArrayList<>();
+            increase.add(list.get(0));
+            for (int i = 1; i < n; i++) {
+                if (list.get(i).equals(list.get(i - 1))) {
+                    decrease.add(list.get(i));
+                } else {
+                    increase.add(list.get(i));
+                }
+            }
+            Collections.reverse(decrease);
+            out.println(increase.size());
+            for (int x : increase) {
+                out.print(x + " ");
+            }
+            out.println();
+            out.println(decrease.size());
+            for (int x : decrease) {
 
+                out.print(x + " ");
+            }
+        }
 
 
 
@@ -96,6 +115,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

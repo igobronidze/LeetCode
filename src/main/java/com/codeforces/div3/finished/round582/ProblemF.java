@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round582;
 
 import java.io.*;
 import java.util.*;
 
-public class ProblemG {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -13,57 +13,74 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
-            }
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        List<Integer> s = new ArrayList<>();
+        List<Integer> t = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            s.add(--x);
+        }
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            t.add(--x);
+        }
+        char[] ans = new char[n + 1];
 
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
+        Set<Integer> setS = new HashSet<>();
+        Set<Integer> setT = new HashSet<>();
+        int x = 0;
+        int i = 0, j = 0;
+        while (i < n) {
+            ans[s.get(i)] = getChar(x);
+            setS.add(s.get(i));
+            i++;
+            while (!setS.isEmpty() || !setT.isEmpty()) {
+                if (!setS.isEmpty()) {
+                    int ind = t.get(j);
+                    if (setS.contains(ind)) {
+                        setS.remove(ind);
+                    } else {
+                        setT.add(ind);
+                        ans[ind] = getChar(x);
+                    }
+                    j++;
+                } else if (!setT.isEmpty()) {
+                    int ind = s.get(i);
+                    if (setT.contains(ind)) {
+                        setT.remove(ind);
+                    } else {
+                        setS.add(ind);
+                        ans[ind] = getChar(x);
+                    }
                     i++;
                 }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
             }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
+            x++;
+        }
+
+
+        if (x < k) {
+            out.println("NO");
+        } else {
+            out.println("YES");
+            for (int q = 0; q < n; q++) {
+                out.print(ans[q]);
             }
-
-            out.println(count + " " + good);
-
         }
 
 
 
-
         out.flush();
+    }
+
+    private static char getChar(int x) {
+        int c = 'a' + x;
+        if (c <= 'z') {
+            return (char)c;
+        } else {
+            return 'z';
+        }
     }
 
     private static class MyScanner {

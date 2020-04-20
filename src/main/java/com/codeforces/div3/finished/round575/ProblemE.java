@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round575;
 
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
-public class ProblemG {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -15,52 +15,62 @@ public class ProblemG {
 
         int t = scanner.nextInt();
         for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
+            int b = scanner.nextInt();
+            int w = scanner.nextInt();
+            if (b > w) {
+                if (w * 3 + 1 < b) {
+                    out.println("NO");
+                } else {
+                    out.println("YES");
+                    for (int i = 1; i <= 2 * w; i += 2) {
+                        out.println(i + " 2");
+                        out.println((i + 1) + " 2");
+                    }
+                    b = b - w;
+                    for (int i = 2; i <= 2 * w; i += 2) {
+                        if (b == 0) {
+                            break;
+                        }
+                        out.println(i + " 1");
+                        b--;
+                        if (b == 0) {
+                            break;
+                        }
+                        out.println(i + " 3");
+                        b--;
+                    }
+                    if (b > 0) {
+                        out.println((w * 2 + 1) + " 2");
+                    }
                 }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
-            }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
+            } else {
+                if (b * 3 + 1 < w) {
+                    out.println("NO");
+                } else {
+                    out.println("YES");
+                    for (int i = 1; i <= 2 * b; i += 2) {
+                        out.println(i + " 3");
+                        out.println((i + 1) + " 3");
+                    }
+                    w = w - b;
+                    for (int i = 2; i <= 2 * b; i += 2) {
+                        if (w == 0) {
+                            break;
+                        }
+                        out.println(i + " 2");
+                        w--;
+                        if (w == 0) {
+                            break;
+                        }
+                        out.println(i + " 4");
+                        w--;
+                    }
+                    if (w > 0) {
+                        out.println((b * 2 + 1) + " 3");
+                    }
                 }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
             }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
         }
-
-
 
 
         out.flush();
@@ -114,7 +124,8 @@ public class ProblemG {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;
@@ -130,7 +141,8 @@ public class ProblemG {
 
         private T third;
 
-        public Triple() {}
+        public Triple() {
+        }
 
         public Triple(F first, S second, T third) {
             this.first = first;

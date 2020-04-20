@@ -1,69 +1,83 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round498;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public class ProblemG {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
     public static OutputStream outputStream = System.out;
 
+    private static int n, m;
+    private static long[][] mat;
+    private static long k;
+
+    private static long ans = 0;
+
     public static void main(String[] args) {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
+        n = scanner.nextInt();
+        m = scanner.nextInt();
+        k = scanner.nextLong();
+        mat = new long[n + 1][m + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                mat[i][j] = scanner.nextLong();
             }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
         }
+
+        Map<Long, Integer>[][] maps = new HashMap[n + 1][m + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                maps[i][j] = new HashMap<>();
+            }
+        }
+
+        dfsLeftTop(0, 0, 0L, maps);
+        dfsRightBottom(n - 1, m - 1, 0L, maps);
+
+        out.println(ans);
 
 
 
 
         out.flush();
+    }
+
+    private static void dfsRightBottom(int i, int j, long xor, Map<Long, Integer>[][] maps) {
+        if (i < 0 || j < 0) {
+            return;
+        }
+        if (i + j == (n + m) / 2 - 1) {
+            if (maps[i][j].containsKey(xor ^ k)) {
+                ans += maps[i][j].get(xor ^ k);
+            }
+            return;
+        }
+        xor = xor ^ mat[i][j];
+        dfsRightBottom(i - 1, j, xor, maps);
+        dfsRightBottom(i, j - 1, xor, maps);
+    }
+
+    private static void dfsLeftTop(int i, int j, long xor, Map<Long, Integer>[][] maps) {
+        if (i >= n || j >= m) {
+            return;
+        }
+        xor = xor ^ mat[i][j];
+        if (i + j == (n + m) / 2 - 1) {
+            if (!maps[i][j].containsKey(xor)) {
+                maps[i][j].put(xor, 0);
+            }
+            maps[i][j].put(xor, maps[i][j].get(xor) + 1);
+            return;
+        }
+        dfsLeftTop(i + 1, j, xor, maps);
+        dfsLeftTop(i, j + 1, xor, maps);
     }
 
     private static class MyScanner {

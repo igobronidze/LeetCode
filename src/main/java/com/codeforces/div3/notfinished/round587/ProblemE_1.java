@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round587;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemE_1 {
 
     public static InputStream inputStream = System.in;
 
@@ -14,33 +16,36 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        for (int q = 0; q < n; q++) {
+            int k = scanner.nextInt();
+            int i = 1;
+            int last = 0;
+            while (true) {
+                last = last + length(i);
+                if (k <= last) {
+                    for (int j = 1; j <= i; j++) {
+                        if (length(j) >= k) {
+                            String s = Integer.toString(j);
+                            out.println(s.charAt(k - 1));
+                            break;
+                        } else {
+                            k -= length(j);
+                        }
+                    }
+                    break;
+                } else {
+                    k -= last;
+                    i++;
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
             }
         }
 
 
-
-
-
         out.flush();
+    }
+
+    private static final int length(int x) {
+        return Integer.toString(x).length();
     }
 
     private static class MyScanner {
@@ -91,7 +96,8 @@ public class ProblemE {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

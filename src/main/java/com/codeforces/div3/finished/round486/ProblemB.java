@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round486;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -14,33 +14,37 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.next());
+        }
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        list.sort(Comparator.comparingInt(String::length));
+
+        for (int i = 1; i < n; i++) {
+            if (!isSubs(list.get(i - 1), list.get(i))) {
+                out.println("NO");
+                out.flush();
+                return;
             }
         }
 
-
-
+        out.println("YES");
+        for (String s : list) {
+            out.println(s);
+        }
 
 
         out.flush();
+    }
+
+    private static boolean isSubs(String a, String b) {
+        for (int i = 0; i <= b.length() - a.length(); i++) {
+            if (a.equals(b.substring(i, i + a.length()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static class MyScanner {

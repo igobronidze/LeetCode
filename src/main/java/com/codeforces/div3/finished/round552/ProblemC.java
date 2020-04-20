@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round552;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,29 +13,50 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 0);
+        map.put(1, 1);
+        map.put(2, 2);
+        map.put(3, 0);
+        map.put(4, 2);
+        map.put(5, 1);
+        map.put(6, 0);
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        int a = scanner.nextInt();
+        int b = scanner.nextInt();
+        int c = scanner.nextInt();
+
+        int ans = 0;
+        for (int i = 0; i <= 6; i++) {
+            List<Integer> list = Arrays.asList(a, b, c);
+            int x = 0;
+            for (int j = i; j <= 6; j++) {
+                int ind = map.get(j);
+                if (list.get(ind) == 0) {
+                    break;
+                } else {
+                    list.set(ind, list.get(ind) - 1);
+                    x++;
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
             }
+            int m = Math.min(list.get(0) / 3, list.get(1) / 2);
+            m = Math.min(m, list.get(2) / 2);
+            x += m * 7;
+            list.set(0, list.get(0) - m * 3);
+            list.set(1, list.get(1) - m * 2);
+            list.set(2, list.get(2) - m * 2);
+            for (int j = 0; j <= 6; j++) {
+                int ind = map.get(j);
+                if (list.get(ind) == 0) {
+                    break;
+                } else {
+                    list.set(ind, list.get(ind) - 1);
+                    x++;
+                }
+            }
+            ans = Math.max(ans, x);
         }
-
+        out.println(ans);
 
 
 
@@ -96,6 +117,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

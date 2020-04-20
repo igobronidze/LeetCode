@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.educational.educational_85;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,29 +15,43 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            long l = scanner.nextLong();
+            long r = scanner.nextLong();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+            long x = n, y = 1;
+            for (int i = 1; i <= n - 1; i++) {
+                if (l - (n - i) * 2 <= 0) {
+                    x = i;
+                    y = l;
+                    break;
+                } else {
+                    l = l - (n - i) * 2;
+                    r = r - (n - i) * 2;
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
             }
+            y = (y + 1) / 2 + x;
+            for (long i = l; i <= r; i++) {
+                if (x == n) {
+                    out.print(1 + " ");
+                } else {
+                    if (i % 2 == 1) {
+                        out.print(x + " ");
+                    } else {
+                        out.print(y + " ");
+                        if (y == n) {
+                            x++;
+                            y = x + 1;
+                        } else {
+                            y++;
+                        }
+                    }
+                }
+            }
+            out.println();
         }
-
 
 
 
@@ -96,6 +112,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

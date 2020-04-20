@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round634;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,29 +15,28 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            Map<Integer, Integer> map = new HashMap<>();
+            int max = 0;
+            for (int i = 0; i < n; i++) {
+                int x = scanner.nextInt();
+                if (!map.containsKey(x)) {
+                    map.put(x, 0);
+                }
+                map.put(x, map.get(x) + 1);
+                max = Math.max(max, map.get(x));
+            }
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+            if (map.size() > max) {
+                out.println(max);
+            } else if (map.size() == max) {
+                out.println(max - 1);
+            } else {
+                out.println(map.size());
             }
         }
-
 
 
 
@@ -96,6 +97,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

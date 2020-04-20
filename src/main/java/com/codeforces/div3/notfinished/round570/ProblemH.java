@@ -1,9 +1,9 @@
 package com.codeforces.div3.notfinished.round570;
 
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
-public class ProblemG {
+public class ProblemH {
 
     public static InputStream inputStream = System.in;
 
@@ -13,53 +13,66 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
+        long m = 1_000_000_000_000L;
+        int n = scanner.nextInt();
+        long k = scanner.nextLong();
+        String s = scanner.next();
+        int[][] lst = new int[n][26];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < 26; j++) {
+                lst[i][j] = -1;
+                for (int p = 0; p <= i; p++) {
+                    if (s.charAt(p) == (char)(j + 'a')) {
+                        lst[i][j] = p;
+                    }
                 }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
             }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
         }
 
+        long[][] dp = new long[n][n + 1];
+        for (int i = 0; i < n; i++) {
+            dp[i][1] = 1;
+        }
+
+        for (int size = 2; size <= n; size++) {
+            for (int i = size - 1; i < n; i++) {
+                for (int p = 0; p < 26; p++) {
+                    int lstInd = lst[i - 1][p];
+                    if (lstInd != -1) {
+                        dp[i][size] += dp[lstInd][size - 1];
+                        dp[i][size] = Math.min(dp[i][size], m);
+                    }
+                }
+            }
+        }
+
+        long ans = 0;
+        for (int size = n; size >= 1; size--) {
+            for (int i = 0; i < 26; i++) {
+                int lstInd = lst[n - 1][i];
+                if (lstInd != -1) {
+                    if (k > dp[lstInd][size]) {
+                        k -= dp[lstInd][size];
+                        ans += (n - size) * dp[lstInd][size];
+                    } else {
+                        ans += (n - size) * k;
+                        k = 0;
+                        break;
+                    }
+                }
+            }
+            if (k <= 0) {
+                break;
+            }
+        }
+
+        if (k == 1) {
+            out.println(ans + n);
+        } else if (k <= 0) {
+            out.println(ans);
+        } else {
+            out.println(-1);
+        }
 
 
 

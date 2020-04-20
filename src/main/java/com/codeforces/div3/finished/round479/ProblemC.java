@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round479;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -15,28 +18,31 @@ public class ProblemE {
 
         int n = scanner.nextInt();
         int k = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
+        }
+        Collections.sort(list);
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
+        int ans = 0;
+
+        if (n == k) {
+            ans = list.get(n - 1);
+        } else if (k == 0) {
+            ans = list.get(0) - 1;
         } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+            if (list.get(k) - list.get(k - 1) <= 0) {
+                ans = -1;
+            } else {
+                ans = list.get(k - 1);
             }
         }
 
-
+        if (ans < 1 || ans > 1_000_000_000) {
+            out.println(-1);
+        } else {
+            out.println(ans);
+        }
 
 
 
@@ -91,7 +97,8 @@ public class ProblemE {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;

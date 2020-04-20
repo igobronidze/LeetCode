@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round498;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -16,27 +16,30 @@ public class ProblemE {
         int n = scanner.nextInt();
         int k = scanner.nextInt();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
-            }
+        List<Pair<Integer, Integer>> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(new Pair<>(scanner.nextInt(), i));
+        }
+        Collections.sort(list, Comparator.comparingInt(a -> a.first));
+        Collections.reverse(list);
+
+        long s = 0;
+        List<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < k; i++) {
+            indexes.add(list.get(i).second);
+            s += list.get(i).first;
+        }
+        Collections.sort(indexes);
+
+        int x = -1;
+        out.println(s);
+        for (int i = 0; i < k - 1; i++) {
+            out.print((indexes.get(i) - x) + " ");
+            x = indexes.get(i);
         }
 
 
+        out.print(n - x - 1);
 
 
 
@@ -96,6 +99,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

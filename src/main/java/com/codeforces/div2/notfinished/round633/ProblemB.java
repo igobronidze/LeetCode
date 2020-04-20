@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div2.notfinished.round633;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,31 +16,28 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                list.add(scanner.nextInt());
             }
+            Collections.sort(list);
+            List<Integer> ans = new ArrayList<>();
+            for (int i = 0; i < n / 2; i++) {
+                ans.add(list.get(i));
+                ans.add(list.get(n - i - 1));
+            }
+            if (n % 2 == 1) {
+                ans.add(list.get(n / 2));
+            }
+            Collections.reverse(ans);
+            for (int x : ans) {
+                out.print(x + " ");
+            }
+            out.println();
         }
-
-
-
 
 
         out.flush();
@@ -91,11 +91,30 @@ public class ProblemE {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {
+        }
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

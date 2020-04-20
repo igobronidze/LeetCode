@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round579;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemD_1 {
 
     public static InputStream inputStream = System.in;
 
@@ -13,34 +13,51 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        String s = scanner.next();
+        String t = scanner.next();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        int ans = 0;
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = i; j < s.length(); j++) {
+                String str = s.substring(0, i) + s.substring(j + 1);
+                if (isSubSeq(str, t)) {
+                    ans = Math.max(ans, j - i + 1);
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
             }
         }
 
-
-
+        out.println(ans);
 
 
         out.flush();
+    }
+
+    private static boolean isSubSeq(String s, String t) {
+        int j = 0;
+        int x = 0;
+        if (t.equals("")) {
+            return true;
+        }
+        if (s.equals("")) {
+            return false;
+        }
+        for (int i = 0; i < t.length(); i++) {
+            while (true) {
+                if (t.charAt(i) == s.charAt(j)) {
+                    x++;
+                    j++;
+                    break;
+                }
+                j++;
+                if (j == s.length()) {
+                    break;
+                }
+            }
+            if (j == s.length()) {
+                break;
+            }
+        }
+        return x == t.length();
     }
 
     private static class MyScanner {
@@ -96,6 +113,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round582;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -16,28 +19,42 @@ public class ProblemE {
         int n = scanner.nextInt();
         int k = scanner.nextInt();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(scanner.nextInt());
+        }
+        Collections.sort(list);
+
+        Pair<Integer, Integer>[] arr = new Pair[200005];
+        for (int i = 0; i <= 200000; i++) {
+            arr[i] = new Pair<>(0, 0);
+        }
+        for (int i = 0; i < n; i++) {
+            int x = list.get(i);
+            int a = 0;
+            while (x != 0) {
+                if (arr[x].first == k) {
+                    break;
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+                arr[x].first++;
+                arr[x].second += a;
+                a++;
+                x = x / 2;
+            }
+            if (arr[x].first != k) {
+                arr[x].first++;
+                arr[x].second += a;
             }
         }
 
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i <= 200000; i++) {
+            if (arr[i].first >= k) {
+                ans = Math.min(ans, arr[i].second);
+            }
+        }
 
-
+        out.println(ans);
 
 
         out.flush();

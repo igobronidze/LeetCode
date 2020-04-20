@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round496;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -14,27 +14,46 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            if (!map.containsKey(x)) {
+                map.put(x, 0);
+            }
+            map.put(x, map.get(x) + 1);
+        }
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        List<Integer> powers = new ArrayList<>();
+        int x = 1;
+        try {
+            while (true) {
+                powers.add(x);
+                x = Math.multiplyExact(x, 2);
+            }
+        } catch (ArithmeticException ex) {}
+
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            boolean find = false;
+            for (int p : powers) {
+                if (p > list.get(i)) {
+                    int y = p - list.get(i);
+                    if (map.containsKey(y)) {
+                        if (y != list.get(i) || map.get(y) != 1) {
+                            find = true;
+                            break;
+                        }
+                    }
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+            }
+            if (!find) {
+                ans++;
             }
         }
+
+        out.println(ans);
 
 
 
@@ -96,6 +115,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round550;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -14,30 +16,40 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        List<Integer> list = new ArrayList<>();
+        int[] count = new int[200008];
+        int ind = 0;
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            count[x]++;
+            if (count[x] > count[list.get(ind)]) {
+                ind = i;
             }
         }
 
+        int x = list.get(ind);
+        List<Triple<Integer, Integer, Integer>> ans = new ArrayList<>();
+        for (int i = ind - 1; i >= 0; i--) {
+            if (list.get(i) > x) {
+                ans.add(new Triple<>(2, i + 1, i + 2));
+            } else if (list.get(i) < x) {
+                ans.add(new Triple<>(1, i + 1, i + 2));
+            }
+        }
 
+        for (int i = ind + 1; i < n; i++) {
+            if (list.get(i) > x) {
+                ans.add(new Triple<>(2, i + 1, i));
+            } else if (list.get(i) < x) {
+                ans.add(new Triple<>(1, i + 1, i));
+            }
+        }
 
+        out.println(ans.size());
+        for (Triple<Integer, Integer, Integer> an : ans) {
+            out.println(an.first + " " + an.second + " " + an.third);
+        }
 
 
         out.flush();
@@ -96,6 +108,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round598;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public class ProblemG {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -13,51 +15,64 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
+        int q = scanner.nextInt();
+        for (int p = 0; p < q; p++) {
             int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
+            String s = scanner.next();
+            String t = scanner.next();
+
+            Map<Character, Integer> sMap = new HashMap<>();
             for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
+                if (!sMap.containsKey(s.charAt(i))) {
+                    sMap.put(s.charAt(i), 0);
                 }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
+                sMap.put(s.charAt(i), sMap.get(s.charAt(i)) + 1);
+            }
+            Map<Character, Integer> tMap = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                if (!tMap.containsKey(t.charAt(i))) {
+                    tMap.put(t.charAt(i), 0);
+                }
+                tMap.put(t.charAt(i), tMap.get(t.charAt(i)) + 1);
             }
 
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
+            boolean cant = false;
+            for (Map.Entry<Character, Integer> entry : sMap.entrySet()) {
+                if (!tMap.containsKey(entry.getKey()) || !tMap.get(entry.getKey()).equals(entry.getValue())) {
+                    cant = true;
                 }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
             }
 
-            out.println(count + " " + good);
-
+            if (cant) {
+                out.println("NO");
+            } else {
+                boolean can = false;
+                for (Map.Entry<Character, Integer> entry : sMap.entrySet()) {
+                    if (entry.getValue() > 1) {
+                        can = true;
+                    }
+                }
+                if (can) {
+                    out.println("YES");
+                } else {
+                    int x = 0, y = 0;
+                    for (int i = 0; i < n; i++) {
+                        for (int j = i + 1; j < n; j++) {
+                            if (s.charAt(i) > s.charAt(j)) {
+                                x++;
+                            }
+                            if (t.charAt(i) > t.charAt(j)) {
+                                y++;
+                            }
+                        }
+                    }
+                    if (x % 2 == y % 2) {
+                        out.println("YES");
+                    } else {
+                        out.println("NO");
+                    }
+                }
+            }
         }
 
 

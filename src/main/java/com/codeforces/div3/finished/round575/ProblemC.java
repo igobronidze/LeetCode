@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round575;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,29 +13,40 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int min = -100_000;
+        int max = 100_000;
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            int minX = min, maxX = max, minY = min, maxY = max;
+            for (int i = 0; i < n; i++) {
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+
+                int f1 = scanner.nextInt();
+                int f2 = scanner.nextInt();
+                int f3 = scanner.nextInt();
+                int f4 = scanner.nextInt();
+                if (f1 == 0) {
+                    minX = Math.max(minX, x);
                 }
-                if (j == k + 1) {
-                    j = 1;
+                if (f2 == 0) {
+                    maxY = Math.min(maxY, y);
                 }
-                n--;
+                if (f3 == 0) {
+                    maxX = Math.min(maxX, x);
+                }
+                if (f4 == 0) {
+                    minY = Math.max(minY, y);
+                }
+            }
+            if (minX > maxX || minY > maxY) {
+                out.println(0);
+            } else {
+                out.println("1 " + minX + " " + minY);
             }
         }
-
 
 
 
@@ -96,6 +107,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

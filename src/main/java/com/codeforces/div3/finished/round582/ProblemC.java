@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round582;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,27 +13,39 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+        Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
+        for (int i = 0; i <= 9; i++) {
+            Set<Integer> set = new HashSet<>();
+            int x = i;
+            int s = 0;
+            while (true) {
+                if (set.contains(x)) {
+                    break;
+                } else {
+                    set.add(x);
+                    s = s + x;
+                    x = (x + i) % 10;
                 }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
             }
+            map.put(i, new Pair<>(set.size(), s));
+        }
+
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            long n = scanner.nextLong();
+            long m = scanner.nextLong();
+
+            long k = n / m;
+            Pair<Integer, Integer> pair = map.get((int)(m % 10));
+            long ans = k / pair.first * pair.second;
+            k = k % pair.first;
+            long x = m % 10;
+            long y = x;
+            for (int i = 0; i < k; i++) {
+                ans += x;
+                x = (x + y) % 10;
+            }
+            out.println(ans);
         }
 
 

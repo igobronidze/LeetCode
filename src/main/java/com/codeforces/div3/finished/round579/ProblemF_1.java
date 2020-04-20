@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round555;
+package com.codeforces.div3.finished.round579;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemD {
+public class ProblemF_1 {
 
     public static InputStream inputStream = System.in;
 
@@ -16,48 +14,55 @@ public class ProblemD {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        List<Integer> ans = new ArrayList<>();
-        long s = 0;
-        for (int i = 1; i <= k; i++) {
-            s = s + i;
-            ans.add(i);
+        int r = scanner.nextInt();
+
+        List<Pair<Integer, Integer>> positives = new ArrayList<>();
+        List<Pair<Integer, Integer>> negatives = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            if (y >= 0) {
+                positives.add(new Pair<>(x, y));
+            } else {
+                negatives.add(new Pair<>(x, y));
+            }
         }
-        if (s > n) {
+
+        Collections.sort(positives, Comparator.comparingInt(x -> x.first));
+        boolean cant = false;
+        for (Pair<Integer, Integer> pair : positives) {
+            if (pair.first > r) {
+                cant = true;
+                break;
+            } else {
+                r = r + pair.second;
+            }
+        }
+
+        if (cant) {
             out.println("NO");
         } else {
-            n = n - (int) s;
-            for (int i = 0; i < k; i++) {
-                ans.set(i, ans.get(i) + n / k);
+            List<Pair<Integer, Integer>> list = new ArrayList<>();
+            for (int i = 0; i < negatives.size(); i++) {
+                list.add(new Pair<>(negatives.get(i).first + negatives.get(i).second, i));
             }
-            n = n % k;
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
+            Collections.sort(list, Comparator.comparingInt(x -> x.first));
+            Collections.reverse(list);
+
+            for (int i = 0; i < negatives.size(); i++) {
+                int ind = list.get(i).second;
+                if (r < negatives.get(ind).first) {
+                    cant = true;
                 }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
+                r = r + negatives.get(ind).second;
+                if (r < 0) {
+                    cant = true;
                 }
-                ans.set(i, ans.get(i) + 1);
-                n--;
             }
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
-            }
-            if (n > 0) {
+            if (cant) {
                 out.println("NO");
             } else {
                 out.println("YES");
-                for (int x : ans) {
-                    out.print(x + " ");
-                }
             }
         }
 
@@ -120,6 +125,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

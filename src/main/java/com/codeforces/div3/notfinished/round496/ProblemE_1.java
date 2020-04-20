@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.notfinished.round496;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemE {
+public class ProblemE_1 {
 
     public static InputStream inputStream = System.in;
 
@@ -14,29 +14,57 @@ public class ProblemE {
         PrintWriter out = new PrintWriter(outputStream);
 
         int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int m = scanner.nextInt();
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
-                }
-                if (j == k + 1) {
-                    j = 1;
-                }
-                n--;
+        List<Integer> list = new ArrayList<>();
+        int ind = 0;
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            if (x == m) {
+                ind = i;
             }
         }
 
+        int[] dp = new int[n];
+        if (list.get(0) <= m) {
+            dp[0] = 1;
+        } else {
+            dp[0] = -1;
+        }
+        for (int i = 1; i < n; i++) {
+            if (list.get(i) <= m) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = dp[i - 1] - 1;
+            }
+        }
 
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = ind; i < n; i++) {
+            int x = dp[i];
+            if (!map.containsKey(x)) {
+                map.put(x, 0);
+            }
+            map.put(x, map.get(x) + 1);
+        }
+
+        long ans = 0;
+
+        for (int i = 0; i <= ind; i++) {
+            int x = 0;
+            if (i != 0) {
+                x = dp[i - 1];
+            }
+            if (map.containsKey(x)) {
+                ans += map.get(x);
+            }
+            if (map.containsKey(x + 1)) {
+                ans += map.get(x + 1);
+            }
+        }
+
+        out.println(ans);
 
 
 
@@ -96,6 +124,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

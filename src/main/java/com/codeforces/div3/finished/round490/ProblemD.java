@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round490;
 
 import java.io.*;
 import java.util.*;
 
-public class ProblemG {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -13,53 +13,63 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
-            }
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        List<Integer> list = new ArrayList<>();
+        int[] remainders = new int[m];
 
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
+        for (int i = 0; i < n; i++) {
+            int x = scanner.nextInt();
+            list.add(x);
+            remainders[x % m]++;
         }
 
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        int index = 1;
+        for (int i = 0; i < m; i++) {
+            if (i == index) {
+                index = (i + 1) % m;
+            }
+            while (remainders[i] > n / m) {
+                if (remainders[index] < n / m) {
+                    if (!map.containsKey(i)) {
+                        map.put(i, new ArrayList<>());
+                    }
+                    map.get(i).add(index);
+                    remainders[i]--;
+                    remainders[index]++;
+                } else {
+                    index++;
+                    if (index == m) {
+                        index = 0;
+                    }
+                }
+            }
+        }
+
+        List<Integer> ansList = new ArrayList<>();
+        long ans = 0;
+        int[] indexes = new int[m];
+        for (int i = 0; i < n; i++) {
+            int x = list.get(i) % m;
+            if (map.containsKey(x) && indexes[x] < map.get(x).size()) {
+                int k = map.get(x).get(indexes[x]) - x;
+                if (k < 0) {
+                    k = m + map.get(x).get(indexes[x]) - x;
+                }
+                ans += k;
+                ansList.add(list.get(i) + k);
+                indexes[x]++;
+            } else {
+                ansList.add(list.get(i));
+            }
+        }
+
+
+        out.println(ans);
+        for (int x : ansList) {
+            out.print(x + " ");
+        }
 
 
 

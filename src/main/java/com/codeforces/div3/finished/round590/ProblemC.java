@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round540;
+package com.codeforces.div3.finished.round590;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,29 +13,49 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            String s1 = "1" + scanner.next() + "1";
+            String s2 = "1" + scanner.next() + "1";
 
-        if (n > (long) k * (k - 1)) {
-            out.println("NO");
-        } else {
-            out.println("YES");
-            int i = 1, j = 2;
-            while (n > 0) {
-                out.println(i + " " + j);
-                i++;
-                j++;
-                if (i == k + 1) {
-                    i = 1;
-                    j++;
+            int i = 0, j = 0;
+            boolean cant = false;
+            boolean changedLine = false;
+            while (true) {
+                if (i == n + 1 && j == 1) {
+                    break;
+                } else if (i == n + 1) {
+                    cant = true;
+                    break;
                 }
-                if (j == k + 1) {
-                    j = 1;
+
+                char c = (j == 0) ? s1.charAt(i) : s2.charAt(i);
+
+                if (c == '1' || c == '2') {
+                    if (changedLine) {
+                        cant = true;
+                        break;
+                    } else {
+                        i++;
+                        changedLine = false;
+                    }
+                } else {
+                    if (changedLine) {
+                        i++;
+                        changedLine = false;
+                    } else {
+                        j = (j + 1) % 2;
+                        changedLine = true;
+                    }
                 }
-                n--;
+            }
+            if (cant) {
+                out.println("NO");
+            } else {
+                out.println("YES");
             }
         }
-
 
 
 
@@ -96,6 +116,23 @@ public class ProblemE {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

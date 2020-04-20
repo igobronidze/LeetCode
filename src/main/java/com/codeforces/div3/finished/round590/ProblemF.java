@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round555;
+package com.codeforces.div3.finished.round590;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemD {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -15,56 +13,67 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        List<Integer> ans = new ArrayList<>();
-        long s = 0;
-        for (int i = 1; i <= k; i++) {
-            s = s + i;
-            ans.add(i);
+        String s = scanner.next();
+
+        int n = s.length();
+        int[] masksSet = new int[1 << 20 + 1];
+        int[] dp = new int[(1 << 20) + 1];
+        for (int i = 0; i < n; i++) {
+            int mask = 0;
+            for (int j = i; j >= 0; j--) {
+                int x = 1 << (s.charAt(j) - 'a');
+                int y = mask ^ x;
+                if (y > mask) {
+                    mask = y;
+                } else {
+                    break;
+                }
+                masksSet[mask] = 1;
+            }
         }
-        if (s > n) {
-            out.println("NO");
-        } else {
-            n = n - (int) s;
-            for (int i = 0; i < k; i++) {
-                ans.set(i, ans.get(i) + n / k);
+
+        for (int i = 0; i < masksSet.length; i++) {
+            if (masksSet[i] == 1) {
+                dp[i] = getOnesCount(i);
             }
-            n = n % k;
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
-            }
-            for (int i = k - 1; i > 0; i--) {
-                if (n == 0) {
-                    break;
-                }
-                if (ans.get(i) + 1 > ans.get(i - 1) * 2) {
-                    break;
-                }
-                ans.set(i, ans.get(i) + 1);
-                n--;
-            }
-            if (n > 0) {
-                out.println("NO");
-            } else {
-                out.println("YES");
-                for (int x : ans) {
-                    out.print(x + " ");
+        }
+
+        for (int i = 1; i <= (1 << 20); i++) {
+            int len = Integer.toBinaryString(i).length();
+            for (int j = 0; j < len; j++) {
+                int x = i ^ (1 << j);
+                if (x < i) {
+                    dp[i] = Math.max(dp[i], dp[x]);
                 }
             }
         }
 
+        int max = (1 << 20) - 1;
+
+        int ans = 0;
+        for (int i = 0; i < masksSet.length; i++) {
+            if (masksSet[i] == 1) {
+                int x = i ^ max;
+                ans = Math.max(ans, getOnesCount(i) + dp[x]);
+            }
+        }
+
+        out.println(ans);
 
 
 
         out.flush();
+    }
+
+    private static int getOnesCount(int x) {
+        String bin = Integer.toBinaryString(x);
+        int s = 0;
+        for (char c : bin.toCharArray()) {
+            if (c == '1') {
+                s++;
+            }
+        }
+        return s;
     }
 
     private static class MyScanner {
@@ -120,6 +129,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

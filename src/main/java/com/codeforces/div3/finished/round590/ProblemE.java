@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round590;
 
 import java.io.*;
 import java.util.*;
 
-public class ProblemG {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -13,53 +13,68 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
-            }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        List<Integer> xList = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            int x = scanner.nextInt();
+            xList.add(x);
         }
 
+        List<Integer>[] adjacents = new ArrayList[n + 1];
+        Map<Integer, Integer> positions = new HashMap<>();
+        for (int i = 1; i <= n; i++) {
+            adjacents[i] = new ArrayList<>();
+            positions.put(i, i);
+        }
+        for (int i = 0; i < m; i++) {
+            if (i != 0) {
+                adjacents[xList.get(i)].add(xList.get(i - 1));
+            }
+            if (i != m - 1) {
+                adjacents[xList.get(i)].add(xList.get(i + 1));
+            }
+        }
+
+
+        long fp1 = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int x : adjacents[i]) {
+                fp1 += Math.abs(positions.get(i) - positions.get(x));
+            }
+        }
+        List<Long> ans = new ArrayList<>();
+        ans.add(fp1 / 2);
+
+        for (int i = 1; i < n; i++) {
+            long change = 0;
+            for (int x : adjacents[i]) {
+                change -= Math.abs(positions.get(i) - positions.get(x));
+            }
+            for (int x : adjacents[i + 1]) {
+                change -= Math.abs(positions.get(i + 1) - positions.get(x));
+            }
+
+            int tmp = positions.get(i);
+            positions.put(i, positions.get(i + 1));
+            positions.put(i + 1, tmp);
+
+            for (int x : adjacents[i]) {
+                change += Math.abs(positions.get(i) - positions.get(x));
+            }
+            for (int x : adjacents[i + 1]) {
+                change += Math.abs(positions.get(i + 1) - positions.get(x));
+            }
+
+            ans.add(ans.get(i - 1) + change);
+        }
+
+
+
+
+        for (long l : ans) {
+            out.print(l + " ");
+        }
 
 
 

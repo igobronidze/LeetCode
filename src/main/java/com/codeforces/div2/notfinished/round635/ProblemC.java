@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div2.notfinished.round635;
 
 import java.io.*;
 import java.util.*;
 
-public class ProblemG {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -13,57 +13,73 @@ public class ProblemG {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Pair<Integer, Integer>> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, new Pair<>(0, 0));
-                }
-                Pair<Integer, Integer> pair = map.get(x);
-                pair.first++;
-                pair.second += y;
-                map.put(x, pair);
-            }
-
-            List<Pair<Integer, Integer>> countOfTypes = new ArrayList<>(map.values());
-            countOfTypes.sort(Comparator.comparingInt(pair -> pair.first));
-            Collections.reverse(countOfTypes);
-
-            int count = 0;
-            int good = 0;
-            PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-            int i = 0;
-            int x = countOfTypes.get(i).first;
-            while (i < countOfTypes.size()) {
-                if (countOfTypes.get(i).first < x && priorityQueue.isEmpty()) {
-                    x = countOfTypes.get(i).first;
-                }
-                while (i < countOfTypes.size() && x == countOfTypes.get(i).first) {
-                    priorityQueue.add(countOfTypes.get(i).second);
-                    i++;
-                }
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-            while (x > 0 && !priorityQueue.isEmpty()) {
-                count += x;
-                good += Math.min(priorityQueue.poll(), x);
-                x--;
-            }
-
-            out.println(count + " " + good);
-
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        Graph graph = new Graph(n);
+        for (int i = 0; i < n -1; i++) {
+            graph.addEdge(scanner.nextInt(), scanner.nextInt());
         }
 
+        graph.dfs();
 
+        List<Node> nodes = new ArrayList<>(graph.nodes.values());
+        Collections.sort(nodes, (a, b) -> Integer.compare(b.path - b.childrenNumber, a.path - a.childrenNumber));
+
+        long ans = 0;
+        for (int i = 0; i < k; i++) {
+            ans += nodes.get(i).path - nodes.get(i).childrenNumber;
+        }
+
+        out.println(ans);
 
 
         out.flush();
+    }
+
+    private static class Graph {
+
+        private Map<Integer, Node> nodes = new HashMap<>();
+
+        private Graph(int n) {
+            for (int i = 1; i <= n; i++) {
+                nodes.put(i, new Node(i));
+            }
+        }
+
+        private void addEdge(int x, int y) {
+            nodes.get(x).children.add(nodes.get(y));
+            nodes.get(y).children.add(nodes.get(x));
+        }
+
+        private void dfs() {
+            nodes.get(1).path = -1;
+            nodes.get(1).dfs(nodes.get(1));
+        }
+    }
+
+    private static class Node {
+
+        private int label;
+
+        private int path;
+
+        private int childrenNumber;
+
+        private List<Node> children = new ArrayList<>();
+
+        private Node(int label) {
+            this.label = label;
+        }
+
+        private void dfs(Node parent) {
+            this.path = parent.path + 1;
+            for (Node child : children) {
+                if (child.label != parent.label) {
+                    child.dfs(this);
+                    this.childrenNumber += child.childrenNumber + 1;
+                }
+            }
+        }
     }
 
     private static class MyScanner {
