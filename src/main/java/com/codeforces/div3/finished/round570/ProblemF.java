@@ -1,10 +1,9 @@
-package com.codeforces.div2.notfinished.round628;
+package com.codeforces.div3.finished.round570;
 
 import java.io.*;
-import java.math.BigInteger;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemD {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -14,28 +13,40 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        long u = scanner.nextLong();
-        long v = scanner.nextLong();
-
-        if (u > v) {
-            out.println(-1);
-        } else if (u % 2 != v % 2) {
-            out.println(-1);
-        } else if (v == 0) {
-            out.println(0);
-        } else if (u == v) {
-            out.println(1);
-            out.println(v);
-        } else {
-            long x = (v - u) / 2;
-            if ((u & x) == 0) {
-                out.println(2);
-                out.println((u ^ x) + " " + x);
-            } else {
-                out.println(3);
-                out.println(u + " " + x + " " + x);
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            Set<Integer> set = new HashSet<>();
+            for (int i = 0; i < n; i++) {
+                set.add(scanner.nextInt());
             }
+            List<Integer> list = new ArrayList<>(set);
+            Collections.sort(list);
+            Collections.reverse(list);
+            int max = Integer.MIN_VALUE;
+            n = list.size();
+            for (int i = 0; i < n; i++) {
+                int m = list.get(i);
+                int k = n;
+                for (int j = i + 1; j < n; j++) {
+                    if (list.get(i) % list.get(j) != 0) {
+                        k = j;
+                        m += list.get(j);
+                        break;
+                    }
+                }
+                for (int j = k; j < n; j++) {
+                    if (list.get(i) % list.get(j) != 0 && list.get(k) % list.get(j) != 0) {
+                        m += list.get(j);
+                        break;
+                    }
+                }
+                max = Math.max(max, m);
+            }
+            out.println(max);
         }
+
+
 
         out.flush();
     }
@@ -93,6 +104,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

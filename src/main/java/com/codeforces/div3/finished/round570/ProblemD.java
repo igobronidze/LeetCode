@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round570;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemB {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -18,22 +16,32 @@ public class ProblemB {
         int t = scanner.nextInt();
         for (int p = 0; p < t; p++) {
             int n = scanner.nextInt();
-            int k = scanner.nextInt();
-            List<Integer> list = new ArrayList<>();
-            int min = Integer.MAX_VALUE;
-            int max = Integer.MIN_VALUE;
+            Map<Integer, Integer> map = new HashMap<>();
             for (int i = 0; i < n; i++) {
                 int x = scanner.nextInt();
-                list.add(x);
-                min = Math.min(min, x);
-                max = Math.max(max, x);
+                if (!map.containsKey(x)) {
+                    map.put(x, 0);
+                }
+                map.put(x, map.get(x) + 1);
             }
 
-            if (min + 2 * k < max) {
-                out.println(-1);
-            } else {
-                out.println(min + k);
+            List<Integer> countOfTypes = new ArrayList<>(map.values());
+            Collections.sort(countOfTypes);
+            Collections.reverse(countOfTypes);
+            int x = countOfTypes.get(0);
+            long ans = x;
+            for (int i = 1; i < countOfTypes.size(); i++) {
+                if (countOfTypes.get(i) >= x - 1) {
+                    x--;
+                } else {
+                    x = countOfTypes.get(i);
+                }
+                if (x <= 0) {
+                    break;
+                }
+                ans += x;
             }
+            out.println(ans);
         }
 
 

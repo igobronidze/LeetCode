@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round634;
+package com.codeforces.div3.finished.round570;
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class ProblemD {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -13,32 +13,26 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int[][] board = new int[9][9];
-
-            for (int i = 0; i < 9; i++) {
-                String s = scanner.next();
-                for (int j = 0; j < 9; j++) {
-                    board[i][j] = s.charAt(j) - '0';
-                }
-            }
-
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
-                    if (board[i][j] == 1) {
-                        out.print(2);
-                    } else {
-                        out.print(board[i][j]);
-                    }
-                }
-                out.println();
+        int x = scanner.nextInt();
+        for (int i = x; i < x + 199; i++) {
+            if (isInt(i)) {
+                out.println(i);
+                break;
             }
         }
 
 
 
         out.flush();
+    }
+
+    private static boolean isInt(int x) {
+        int s = 0;
+        while (x != 0) {
+            s = s + x % 10;
+            x = x / 10;
+        }
+        return s % 4 == 0;
     }
 
     private static class MyScanner {

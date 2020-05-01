@@ -1,9 +1,9 @@
-package com.codeforces.div3.notfinished.round634;
+package com.codeforces.div3.notfinished.round636;
 
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -15,51 +15,16 @@ public class ProblemE {
 
         int t = scanner.nextInt();
         for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            List<Integer> list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                list.add(scanner.nextInt());
-            }
-            if (n == 1) {
-                out.println(n);
-            } else {
-                int[][] dp = new int[n + 1][202];
-                dp[0][list.get(0)] = 1;
-                for (int i = 1; i < n; i++) {
-                    for (int j = 1; j <= 200; j++) {
-                        dp[i][j] = dp[i - 1][j];
-                    }
-                    dp[i][list.get(i)]++;
+            long n = scanner.nextInt();
+            long i = 2;
+            long s = 1;
+            while (i <= n) {
+                s = s + i;
+                if (n % s == 0) {
+                    out.println(n / s);
+                    break;
                 }
-
-                TreeMap<Integer, Integer>[] maps = new TreeMap[205];
-                for (int i = 0; i < n; i++) {
-                    if (maps[list.get(i)] == null) {
-                        maps[list.get(i)] = new TreeMap<>();
-                        maps[list.get(i)].put(1, i);
-                    } else {
-                        maps[list.get(i)].put(maps[list.get(i)].lastKey() + 1, i);
-                    }
-                }
-                int ans = 0;
-                int[] count = new int[205];
-                for (int i = n - 1; i >= 0; i--) {
-                    count[list.get(i)]++;
-                    int ind = maps[list.get(i)].get(count[list.get(i)]);
-                    if (ind < i) {
-                        int max = 0;
-                        for (int j = 1; j <= 200; j++) {
-                            max = Math.max(max, dp[i - 1][j] - dp[ind][j]);
-                        }
-                        ans = Math.max(ans, count[list.get(i)] * 2 + max);
-                    }
-                }
-
-                for (int i = 1; i <= 200; i++) {
-                    ans = Math.max(ans, count[i]);
-                }
-
-                out.println(ans);
+                i = i * 2;
             }
         }
 

@@ -1,10 +1,9 @@
-package com.codeforces.div2.notfinished.round628;
+package com.codeforces.div2.notfinished.round637;
 
 import java.io.*;
-import java.math.BigInteger;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class ProblemD {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -14,28 +13,45 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        long u = scanner.nextLong();
-        long v = scanner.nextLong();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                int x = scanner.nextInt();
+                list.add(x);
+                map.put(x, i);
+            }
+            boolean[] visited = new boolean[n + 1];
 
-        if (u > v) {
-            out.println(-1);
-        } else if (u % 2 != v % 2) {
-            out.println(-1);
-        } else if (v == 0) {
-            out.println(0);
-        } else if (u == v) {
-            out.println(1);
-            out.println(v);
-        } else {
-            long x = (v - u) / 2;
-            if ((u & x) == 0) {
-                out.println(2);
-                out.println((u ^ x) + " " + x);
+            int x = 1;
+            boolean cant = false;
+            while (x <= n) {
+                int ind = map.get(x);
+                while (ind < n && !visited[ind]) {
+                    if (list.get(ind) != x) {
+                        cant = true;
+                        break;
+                    } else {
+                        visited[ind] = true;
+                    }
+                    ind++;
+                    x++;
+                }
+                if (cant) {
+                    break;
+                }
+            }
+            if (cant) {
+                out.println("No");
             } else {
-                out.println(3);
-                out.println(u + " " + x + " " + x);
+                out.println("Yes");
             }
         }
+
+
+
 
         out.flush();
     }
@@ -93,6 +109,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

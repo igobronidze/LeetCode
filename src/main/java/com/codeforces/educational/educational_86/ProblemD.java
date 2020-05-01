@@ -1,11 +1,12 @@
-package com.codeforces.div3.notfinished.round634;
+package com.codeforces.educational.educational_86;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemC {
+public class ProblemD {
 
     public static InputStream inputStream = System.in;
 
@@ -15,29 +16,44 @@ public class ProblemC {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Integer> map = new HashMap<>();
-            int max = 0;
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, 0);
-                }
-                map.put(x, map.get(x) + 1);
-                max = Math.max(max, map.get(x));
-            }
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        List<Integer> sizes = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            sizes.add(scanner.nextInt());
+        }
+        Collections.sort(sizes);
+        Collections.reverse(sizes);
 
-            if (map.size() > max) {
-                out.println(max);
-            } else if (map.size() == max) {
-                out.println(max - 1);
-            } else {
-                out.println(map.size());
-            }
+        int[] maxNums = new int[k + 1];
+        for (int i = 1; i <= k; i++) {
+            int x = scanner.nextInt();
+            maxNums[i] = x;
+        }
+        for (int i = 2; i <= k; i++) {
+            maxNums[i] = Math.min(maxNums[i], maxNums[i - 1]);
         }
 
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = sizes.get(i);
+            if (maxNums[x] <= list.size()) {
+                ans.add(list);
+                list = new ArrayList<>();
+            }
+            list.add(sizes.get(i));
+        }
+        ans.add(list);
+
+        out.println(ans.size());
+        for (List<Integer> ansList : ans) {
+            out.print(ansList.size() + " ");
+            for (int x : ansList) {
+                out.print(x + " ");
+            }
+            out.println();
+        }
 
 
 

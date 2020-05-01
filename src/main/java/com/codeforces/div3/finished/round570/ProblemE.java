@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round570;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class ProblemA {
+public class ProblemE {
 
     public static InputStream inputStream = System.in;
 
@@ -13,26 +15,54 @@ public class ProblemA {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int x = scanner.nextInt();
-        for (int i = x; i < x + 199; i++) {
-            if (isInt(i)) {
-                out.println(i);
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        Set<String> set = new HashSet<>();
+        String t = scanner.next();
+
+        set.add(t);
+
+        int ans = 0;
+        int size = t.length();
+
+        k--;
+
+        while (k != 0) {
+            Set<String> tmp = new HashSet<>();
+            for (String s : set) {
+                for (int i = 0; i < s.length(); i++) {
+                    String str = s.substring(0, i) + s.substring(i + 1);
+                    if (!tmp.contains(str)) {
+                        tmp.add(str);
+                        k--;
+                        ans = ans + (size - str.length());
+                        if (k == 0) {
+                            break;
+                        }
+                    }
+                }
+                if (k == 0) {
+                    break;
+                }
+            }
+            if (k == 0) {
                 break;
             }
+            set = tmp;
+            if (set.isEmpty()) {
+                break;
+            }
+        }
+
+        if (k == 0) {
+            out.println(ans);
+        } else {
+            out.println(-1);
         }
 
 
 
         out.flush();
-    }
-
-    private static boolean isInt(int x) {
-        int s = 0;
-        while (x != 0) {
-            s = s + x % 10;
-            x = x / 10;
-        }
-        return s % 4 == 0;
     }
 
     private static class MyScanner {

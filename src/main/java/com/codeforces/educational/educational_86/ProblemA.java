@@ -1,10 +1,9 @@
-package com.codeforces.div2.notfinished.round628;
+package com.codeforces.educational.educational_86;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.util.StringTokenizer;
 
-public class ProblemD {
+public class ProblemA {
 
     public static InputStream inputStream = System.in;
 
@@ -14,28 +13,21 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        long u = scanner.nextLong();
-        long v = scanner.nextLong();
-
-        if (u > v) {
-            out.println(-1);
-        } else if (u % 2 != v % 2) {
-            out.println(-1);
-        } else if (v == 0) {
-            out.println(0);
-        } else if (u == v) {
-            out.println(1);
-            out.println(v);
-        } else {
-            long x = (v - u) / 2;
-            if ((u & x) == 0) {
-                out.println(2);
-                out.println((u ^ x) + " " + x);
-            } else {
-                out.println(3);
-                out.println(u + " " + x + " " + x);
-            }
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            long x = scanner.nextInt();
+            long y = scanner.nextInt();
+            long a = scanner.nextInt();
+            long b = scanner.nextInt();
+            long min = Math.min(x, y);
+            long ans = min * b + (Math.max(x, y) - min) * a;
+            ans = Math.min(ans, (x + y) * a);
+            out.println(ans);
         }
+
+
+
+
 
         out.flush();
     }
@@ -93,6 +85,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

@@ -1,11 +1,9 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round570;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
-public class ProblemE {
+public class ProblemC {
 
     public static InputStream inputStream = System.in;
 
@@ -15,50 +13,28 @@ public class ProblemE {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
-        Set<String> set = new HashSet<>();
-        String t = scanner.next();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            long k = scanner.nextInt();
+            long n = scanner.nextInt();
+            long a = scanner.nextInt();
+            long b = scanner.nextInt();
 
-        set.add(t);
-
-        int ans = 0;
-        int size = t.length();
-
-        k--;
-
-        while (k != 0) {
-            Set<String> tmp = new HashSet<>();
-            for (String s : set) {
-                for (int i = 0; i < s.length(); i++) {
-                    String str = s.substring(0, i) + s.substring(i + 1);
-                    if (!tmp.contains(str)) {
-                        tmp.add(str);
-                        k--;
-                        ans = ans + (size - str.length());
-                        if (k == 0) {
-                            break;
-                        }
-                    }
+            if (b * n >= k) {
+                out.println(-1);
+            } else {
+                long x = k - b * n;
+                long y = a - b;
+                long ans;
+                if (x % y == 0) {
+                    ans = x / y - 1;
+                } else {
+                    ans = x / y;
                 }
-                if (k == 0) {
-                    break;
-                }
-            }
-            if (k == 0) {
-                break;
-            }
-            set = tmp;
-            if (set.isEmpty()) {
-                break;
+                out.println(Math.min(ans, n));
             }
         }
 
-        if (k == 0) {
-            out.println(ans);
-        } else {
-            out.println(-1);
-        }
 
 
 

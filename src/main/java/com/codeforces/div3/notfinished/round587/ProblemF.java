@@ -1,9 +1,12 @@
-package com.codeforces.div3.notfinished.round634;
+package com.codeforces.div3.notfinished.round587;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
-public class ProblemB {
+public class ProblemF {
 
     public static InputStream inputStream = System.in;
 
@@ -13,25 +16,47 @@ public class ProblemB {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        int t = scanner.nextInt();
-        for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            int a = scanner.nextInt();
-            int b = scanner.nextInt();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < a - b; i++) {
-                sb.append('a');
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        String s = scanner.next();
+        long[] dp = new long[n];
+        long[] rrr = new long[n];
+        dp[0] = 1;
+        TreeMap<Long, Integer> map = new TreeMap<>();
+        if (s.charAt(0) == '1') {
+            map.put(1L, 1);
+            rrr[0] = 1;
+        }
+        for (int i = 1; i < n; i++) {
+            if (s.charAt(i) == '0') {
+                long p = dp[i - 1] + i + 1;
+                dp[i] = p;
+            } else {
+                long p = i - k - 1 >= 0 ? Math.min(dp[i - k - 1], dp[i - 1]) : 0L;
+                p = p + i + 1;
+                dp[i] = p;
+                if (!map.containsKey(p)) {
+                    map.put(p, 0);
+                }
+                map.put(p, map.get(p) + 1);
+                rrr[i] = p;
             }
-            for (int i = 0; i < b; i++) {
-                sb.append((char)('a' + i));
+
+            if (!map.isEmpty()) {
+                dp[i] = Math.min(dp[i], map.firstKey());
             }
-            StringBuilder ans = new StringBuilder();
-            for (int i = 0; i < n; i++) {
-                ans.append(sb.charAt(i % a));
+            int ind = i - k;
+            if (ind >= 0) {
+                if (s.charAt(ind) == '1') {
+                    map.put(rrr[ind], map.get(rrr[ind]) - 1);
+                    if (map.get(rrr[ind]) == 0) {
+                        map.remove(rrr[ind]);
+                    }
+                }
             }
-            out.println(ans);
         }
 
+        out.println(dp[n - 1]);
 
 
 

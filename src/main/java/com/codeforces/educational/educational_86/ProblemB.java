@@ -1,10 +1,9 @@
-package com.codeforces.div2.notfinished.round628;
+package com.codeforces.educational.educational_86;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.util.StringTokenizer;
 
-public class ProblemD {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -14,28 +13,39 @@ public class ProblemD {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        long u = scanner.nextLong();
-        long v = scanner.nextLong();
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            String s = scanner.next();
 
-        if (u > v) {
-            out.println(-1);
-        } else if (u % 2 != v % 2) {
-            out.println(-1);
-        } else if (v == 0) {
-            out.println(0);
-        } else if (u == v) {
-            out.println(1);
-            out.println(v);
-        } else {
-            long x = (v - u) / 2;
-            if ((u & x) == 0) {
-                out.println(2);
-                out.println((u ^ x) + " " + x);
+            boolean allEqual = true;
+            for (int i = 1; i < s.length(); i++) {
+                if (s.charAt(i) != s.charAt(i - 1)) {
+                    allEqual = false;
+                    break;
+                }
+            }
+
+            if (allEqual) {
+                out.println(s);
             } else {
-                out.println(3);
-                out.println(u + " " + x + " " + x);
+                StringBuilder ans = new StringBuilder();
+                ans.append(s.charAt(0));
+                for (int i = 1; i < s.length(); i++) {
+                    if (s.charAt(i) == s.charAt(i - 1)) {
+                        if (s.charAt(i) == '0') {
+                            ans.append('1');
+                        } else {
+                            ans.append('0');
+                        }
+                    }
+                    ans.append(s.charAt(i));
+                }
+                out.println(ans);
             }
         }
+
+
+
 
         out.flush();
     }
@@ -93,6 +103,23 @@ public class ProblemD {
         public Pair(F first, S second) {
             this.first = first;
             this.second = second;
+        }
+    }
+
+    private static class Triple<F, S, T> {
+
+        private F first;
+
+        private S second;
+
+        private T third;
+
+        public Triple() {}
+
+        public Triple(F first, S second, T third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
     }
 }

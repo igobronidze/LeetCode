@@ -1,9 +1,11 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.notfinished.round636;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class ProblemH {
+public class ProblemB {
 
     public static InputStream inputStream = System.in;
 
@@ -13,67 +15,35 @@ public class ProblemH {
         MyScanner scanner = new MyScanner(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
 
-        long m = 1_000_000_000_000L;
-        int n = scanner.nextInt();
-        long k = scanner.nextLong();
-        String s = scanner.next();
-        int[][] lst = new int[n][26];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < 26; j++) {
-                lst[i][j] = -1;
-                for (int p = 0; p <= i; p++) {
-                    if (s.charAt(p) == (char)(j + 'a')) {
-                        lst[i][j] = p;
-                    }
-                }
-            }
-        }
-
-        long[][] dp = new long[n][n + 1];
-        for (int i = 0; i < n; i++) {
-            dp[i][1] = 1;
-        }
-
-        for (int size = 2; size <= n; size++) {
-            for (int i = size - 1; i < n; i++) {
-                for (int p = 0; p < 26; p++) {
-                    int lstInd = lst[i - 1][p];
-                    if (lstInd != -1) {
-                        dp[i][size] += dp[lstInd][size - 1];
-                        dp[i][size] = Math.min(dp[i][size], m);
-                    }
-                }
-            }
-        }
-
-        long ans = 0;
-        for (int size = n; size >= 1; size--) {
-            for (int i = 0; i < 26; i++) {
-                int lstInd = lst[n - 1][i];
-                if (lstInd != -1) {
-                    if (k > dp[lstInd][size]) {
-                        k -= dp[lstInd][size];
-                        ans += (n - size) * dp[lstInd][size];
+        int t = scanner.nextInt();
+        for (int p = 0; p < t; p++) {
+            int n = scanner.nextInt();
+            int m = n / 2;
+            if (m % 2 == 0) {
+                out.println("YES");
+                List<Integer> evens = new ArrayList<>();
+                List<Integer> odds = new ArrayList<>();
+                boolean b = true;
+                for (int i = 2; i <= n * 2; i += 4) {
+                    evens.add(i);
+                    if (b) {
+                        odds.add(i - 1);
                     } else {
-                        ans += (n - size) * k;
-                        k = 0;
-                        break;
+                        odds.add(i + 1);
                     }
+                    b = !b;
                 }
-            }
-            if (k <= 0) {
-                break;
+                for (int x : evens) {
+                    out.print(x + " ");
+                }
+                for (int x : odds) {
+                    out.print(x + " ");
+                }
+                out.println();
+            } else {
+                out.println("NO");
             }
         }
-
-        if (k == 1) {
-            out.println(ans + n);
-        } else if (k <= 0) {
-            out.println(ans);
-        } else {
-            out.println(-1);
-        }
-
 
 
         out.flush();
@@ -127,7 +97,8 @@ public class ProblemH {
 
         private S second;
 
-        public Pair() {}
+        public Pair() {
+        }
 
         public Pair(F first, S second) {
             this.first = first;
@@ -143,7 +114,8 @@ public class ProblemH {
 
         private T third;
 
-        public Triple() {}
+        public Triple() {
+        }
 
         public Triple(F first, S second, T third) {
             this.first = first;

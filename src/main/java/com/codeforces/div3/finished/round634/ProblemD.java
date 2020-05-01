@@ -1,7 +1,7 @@
-package com.codeforces.div3.notfinished.round570;
+package com.codeforces.div3.finished.round634;
 
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class ProblemD {
 
@@ -15,35 +15,26 @@ public class ProblemD {
 
         int t = scanner.nextInt();
         for (int p = 0; p < t; p++) {
-            int n = scanner.nextInt();
-            Map<Integer, Integer> map = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                int x = scanner.nextInt();
-                if (!map.containsKey(x)) {
-                    map.put(x, 0);
+            int[][] board = new int[9][9];
+
+            for (int i = 0; i < 9; i++) {
+                String s = scanner.next();
+                for (int j = 0; j < 9; j++) {
+                    board[i][j] = s.charAt(j) - '0';
                 }
-                map.put(x, map.get(x) + 1);
             }
 
-            List<Integer> countOfTypes = new ArrayList<>(map.values());
-            Collections.sort(countOfTypes);
-            Collections.reverse(countOfTypes);
-            int x = countOfTypes.get(0);
-            long ans = x;
-            for (int i = 1; i < countOfTypes.size(); i++) {
-                if (countOfTypes.get(i) >= x - 1) {
-                    x--;
-                } else {
-                    x = countOfTypes.get(i);
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    if (board[i][j] == 1) {
+                        out.print(2);
+                    } else {
+                        out.print(board[i][j]);
+                    }
                 }
-                if (x <= 0) {
-                    break;
-                }
-                ans += x;
+                out.println();
             }
-            out.println(ans);
         }
-
 
 
 
